@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
+   <children>
+      <MenuBar VBox.vgrow="NEVER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Arquivo">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onNovoDBAction" text="Novo Banco de Dados" />
+              <MenuItem mnemonicParsing="false" onAction="#onAbrirDBAction" text="Abrir Banco de Dados" />
+              <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#onExportarJSONAction" text="Exportar JSON" />
+              <MenuItem mnemonicParsing="false" onAction="#onExportarXMLAction" text="Exportar XML" />
+              <MenuItem mnemonicParsing="false" onAction="#onImportarJSONAction" text="Importar JSON" />
+              <MenuItem mnemonicParsing="false" onAction="#onImportarXMLAction" text="Importar XML" />
+              <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#onSairAction" text="Sair" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Editar">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onAtualizarTabelaAction" text="Atualizar Tabela" />
+              <MenuItem mnemonicParsing="false" onAction="#onLimparCamposAction" text="Limpar Campos" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Ajuda">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#onSobreAction" text="Sobre o Sistema" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <tabs>
+                <Tab closable="false" text="Gerenciamento de Livros">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <SplitPane dividerPositions="0.45" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="160.0">
+                                       <children>
+                                          <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f8f9fa;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Label layoutX="400.0" layoutY="20.0" text="Cadastro de Livros" textFill="#2c3e50">
+                                                   <font>
+                                                      <Font name="System Bold" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="50.0" layoutY="80.0" text="ID:" textFill="#34495e" />
+                                                <TextField fx:id="idField" disable="true" editable="false" layoutX="50.0" layoutY="100.0" prefWidth="150.0" style="-fx-background-color: #ecf0f1;" />
+                                                <Label layoutX="220.0" layoutY="80.0" text="Título:" textFill="#34495e" />
+                                                <TextField fx:id="tituloField" disable="true" layoutX="220.0" layoutY="100.0" prefWidth="250.0" />
+                                                <Label layoutX="490.0" layoutY="80.0" text="Autor:" textFill="#34495e" />
+                                                <ComboBox fx:id="autorComboBox" disable="true" layoutX="490.0" layoutY="100.0" prefWidth="200.0" />
+                                                <Label layoutX="710.0" layoutY="80.0" text="Ano de Publicação:" textFill="#34495e" />
+                                                <TextField fx:id="anoPublicacaoField" disable="true" layoutX="710.0" layoutY="100.0" prefWidth="120.0" />
+                                                <Label layoutX="50.0" layoutY="140.0" text="Preço (R$):" textFill="#34495e" />
+                                                <TextField fx:id="precoField" disable="true" layoutX="50.0" layoutY="160.0" prefWidth="150.0" />
+                                                <Label layoutX="220.0" layoutY="140.0" text="Data de Cadastro:" textFill="#34495e" />
+                                                <TextField fx:id="dataCadastroField" disable="true" layoutX="220.0" layoutY="160.0" prefWidth="150.0" />
+                                                <Button fx:id="adicionarButton" layoutX="50.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAdicionarButtonAction" prefWidth="100.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Adicionar" />
+                                                <Button fx:id="atualizarButton" disable="true" layoutX="160.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAtualizarButtonAction" prefWidth="100.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Atualizar" />
+                                                <Button fx:id="deletarButton" disable="true" layoutX="270.0" layoutY="220.0" mnemonicParsing="false" onAction="#onDeletarButtonAction" prefWidth="100.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Deletar" />
+                                                <Button fx:id="cancelarButton" disable="true" layoutX="380.0" layoutY="220.0" mnemonicParsing="false" onAction="#onCancelarButtonAction" prefWidth="100.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancelar" />
+                                                <Button fx:id="salvarButton" disable="true" layoutX="490.0" layoutY="220.0" mnemonicParsing="false" onAction="#onSalvarButtonAction" prefWidth="100.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Salvar" />
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                  </AnchorPane>
+                                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="998.0">
+                                       <children>
+                                          <TableView fx:id="tabela" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                              <TableColumn fx:id="idCol" editable="false" prefWidth="60.0" text="ID" />
+                                              <TableColumn fx:id="tituloCol" prefWidth="250.0" text="Título" />
+                                              <TableColumn fx:id="autorCol" prefWidth="200.0" text="Autor" />
+                                              <TableColumn fx:id="anoPublicacaoCol" prefWidth="120.0" text="Ano Publicação" />
+                                              <TableColumn fx:id="precoCol" prefWidth="100.0" text="Preço (R$)" />
+                                              <TableColumn fx:id="dataCadastroCol" prefWidth="150.0" text="Data Cadastro" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                  </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Gerenciamento de Autores">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <SplitPane dividerPositions="0.45" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <Pane prefHeight="263.0" prefWidth="996.0" style="-fx-background-color: #f8f9fa;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Label layoutX="400.0" layoutY="20.0" text="Cadastro de Autores" textFill="#2c3e50">
+                                                   <font>
+                                                      <Font name="System Bold" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="50.0" layoutY="80.0" text="ID:" />
+                                                <TextField fx:id="idAutorField" disable="true" editable="false" layoutX="50.0" layoutY="100.0" prefWidth="150.0" style="-fx-background-color: #ecf0f1;" />
+                                                <Label layoutX="220.0" layoutY="80.0" text="Nome:" />
+                                                <TextField fx:id="nomeAutorField" disable="true" layoutX="220.0" layoutY="100.0" prefWidth="250.0" />
+                                                <Label layoutX="490.0" layoutY="80.0" text="Nacionalidade:" />
+                                                <TextField fx:id="nacionalidadeAutorField" disable="true" layoutX="490.0" layoutY="100.0" prefWidth="200.0" />
+                                                <Button fx:id="adicionarAutorButton" layoutX="50.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAdicionarAutorAction" prefWidth="100.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Adicionar" />
+                                                <Button fx:id="atualizarAutorButton" disable="true" layoutX="160.0" layoutY="220.0" mnemonicParsing="false" onAction="#onAtualizarAutorAction" prefWidth="100.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Atualizar" />
+                                                <Button fx:id="deletarAutorButton" disable="true" layoutX="270.0" layoutY="220.0" mnemonicParsing="false" onAction="#onDeletarAutorAction" prefWidth="100.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Deletar" />
+                                                <Button fx:id="cancelarAutorButton" disable="true" layoutX="380.0" layoutY="220.0" mnemonicParsing="false" onAction="#onCancelarAutorAction" prefWidth="100.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancelar" />
+                                                <Button fx:id="salvarAutorButton" disable="true" layoutX="490.0" layoutY="220.0" mnemonicParsing="false" onAction="#onSalvarAutorAction" prefWidth="100.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Salvar" />
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                  </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <TableView fx:id="tabelaAutor" prefHeight="323.0" prefWidth="996.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                              <TableColumn fx:id="idAutorCol" prefWidth="75.0" text="ID" />
+                                              <TableColumn fx:id="nomeAutorCol" prefWidth="400.0" text="Nome" />
+                                              <TableColumn fx:id="nacionalidadeAutorCol" prefWidth="300.0" text="Nacionalidade" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                  </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Relatórios e Exportação">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Label layoutX="350.0" layoutY="200.0" text="Funcionalidades de Relatórios e Exportação" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="300.0" layoutY="230.0" text="Utilize o menu 'Arquivo' para importar/exportar dados em JSON ou XML" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
