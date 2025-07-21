@@ -1,292 +1,388 @@
 package controller;
 
-import Model.Autor;
-import Model.AutorRepository;
-import Model.Database;
-import Model.Livro;
-import Model.LivroRepository;
+import Model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.FileChooser;
-import view.LivroView;
+import view.*;
 
-import java.io.File;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AppController implements Initializable {
 
-    // --- COMPONENTES FXML PARA LIVROS ---
-    @FXML private TableView<LivroView> tabela;
-    @FXML private TableColumn<LivroView, Integer> idCol;
-    @FXML private TableColumn<LivroView, String> tituloCol;
-    @FXML private TableColumn<LivroView, String> autorCol;
-    @FXML private TableColumn<LivroView, Integer> anoPublicacaoCol;
-    @FXML private TableColumn<LivroView, Double> precoCol;
-    @FXML private TableColumn<LivroView, String> dataCadastroCol;
-    @FXML private TextField idField;
-    @FXML private TextField tituloField;
-    @FXML private ComboBox<Autor> autorComboBox;
-    @FXML private TextField anoPublicacaoField;
-    @FXML private TextField precoField;
-    @FXML private TextField dataCadastroField;
-    @FXML private Button adicionarButton;
-    @FXML private Button atualizarButton;
-    @FXML private Button deletarButton;
-    @FXML private Button cancelarButton;
-    @FXML private Button salvarButton;
+    //region FXML Components & Repositories
+    // --- GERAL ---
+    private enum FormState { INITIAL, VIEWING, ADDING, EDITING, EDITING_DEVOLUCAO }
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    // --- COMPONENTES FXML PARA AUTORES ---
-    @FXML private TableView<Autor> tabelaAutor;
-    @FXML private TableColumn<Autor, Integer> idAutorCol;
-    @FXML private TableColumn<Autor, String> nomeAutorCol;
-    @FXML private TableColumn<Autor, String> nacionalidadeAutorCol;
+    // --- REPOSITÓRIOS ---
+    private final Database database = new Database("livraria.sqlite");
+    private final LivroRepository livroRepo = new LivroRepository(database);
+    private final AutorRepository autorRepo = new AutorRepository(database);
+    private final EditoraRepository editoraRepo = new EditoraRepository(database);
+    private final UsuarioRepository usuarioRepo = new UsuarioRepository(database);
+    private final EmprestimoRepository emprestimoRepo = new EmprestimoRepository(database);
+
+    // --- COMPONENTES FXML: EMPRÉSTIMO ---
+    @FXML private TextField idEmprestimoField;
+    @FXML private ComboBox<Usuario> emprestimoUsuarioComboBox;
+    @FXML private ComboBox<Livro> emprestimoLivroComboBox;
+    @FXML private DatePicker dataEmprestimoPicker;
+    @FXML private DatePicker dataDevolucaoPrevistaPicker;
+    @FXML private DatePicker dataDevolucaoRealPicker;
+    @FXML private Button adicionarEmprestimoButton;
+    @FXML private Button salvarEmprestimoButton;
+    @FXML private Button cancelarEmprestimoButton;
+    @FXML private Button registrarDevolucaoButton;
+    @FXML private Button deletarEmprestimoButton;
+    @FXML private TableView<EmprestimoView> tabelaEmprestimo;
+    @FXML private TableColumn<EmprestimoView, Integer> idEmprestimoCol;
+    @FXML private TableColumn<EmprestimoView, String> usuarioEmprestimoCol;
+    @FXML private TableColumn<EmprestimoView, String> livroEmprestimoCol;
+    @FXML private TableColumn<EmprestimoView, String> dataEmprestimoCol;
+    @FXML private TableColumn<EmprestimoView, String> dataDevolucaoPrevistaCol;
+    @FXML private TableColumn<EmprestimoView, String> dataDevolucaoRealCol;
+
+    // --- COMPONENTES FXML: LIVRO ---
+    @FXML private TextField idLivroField;
+    @FXML private TextField tituloLivroField;
+    @FXML private TextField anoPublicacaoLivroField;
+    @FXML private TextField precoLivroField;
+    @FXML private ComboBox<Autor> livroAutorComboBox;
+    @FXML private ComboBox<Editora> livroEditoraComboBox;
+    @FXML private Button adicionarLivroButton;
+    @FXML private Button atualizarLivroButton;
+    @FXML private Button deletarLivroButton;
+    @FXML private Button salvarLivroButton;
+    @FXML private Button cancelarLivroButton;
+    @FXML private TableView<LivroView> tabelaLivro;
+    @FXML private TableColumn<LivroView, Integer> idLivroCol;
+    @FXML private TableColumn<LivroView, String> tituloLivroCol;
+    @FXML private TableColumn<LivroView, String> autorLivroCol;
+    @FXML private TableColumn<LivroView, String> editoraLivroCol;
+    @FXML private TableColumn<LivroView, Integer> anoPublicacaoLivroCol;
+    @FXML private TableColumn<LivroView, Double> precoLivroCol;
+
+    // --- COMPONENTES FXML: AUTOR ---
     @FXML private TextField idAutorField;
     @FXML private TextField nomeAutorField;
     @FXML private TextField nacionalidadeAutorField;
     @FXML private Button adicionarAutorButton;
     @FXML private Button atualizarAutorButton;
     @FXML private Button deletarAutorButton;
-    @FXML private Button cancelarAutorButton;
     @FXML private Button salvarAutorButton;
-    
-    // --- REPOSITÓRIOS E BANCO DE DADOS ---
-    private static final Database database = new Database("livraria.sqlite");
-    private static final LivroRepository livroRepo = new LivroRepository(database);
-    private static final AutorRepository autorRepo = new AutorRepository(database);
+    @FXML private Button cancelarAutorButton;
+    @FXML private TableView<Autor> tabelaAutor;
+    @FXML private TableColumn<Autor, Integer> idAutorCol;
+    @FXML private TableColumn<Autor, String> nomeAutorCol;
+    @FXML private TableColumn<Autor, String> nacionalidadeAutorCol;
+
+    // --- COMPONENTES FXML: EDITORA ---
+    @FXML private TextField idEditoraField;
+    @FXML private TextField nomeEditoraField;
+    @FXML private TextField enderecoEditoraField;
+    @FXML private TextField telefoneEditoraField;
+    @FXML private Button adicionarEditoraButton;
+    @FXML private Button atualizarEditoraButton;
+    @FXML private Button deletarEditoraButton;
+    @FXML private Button salvarEditoraButton;
+    @FXML private Button cancelarEditoraButton;
+    @FXML private TableView<Editora> tabelaEditora;
+    @FXML private TableColumn<Editora, Integer> idEditoraCol;
+    @FXML private TableColumn<Editora, String> nomeEditoraCol;
+    @FXML private TableColumn<Editora, String> enderecoEditoraCol;
+    @FXML private TableColumn<Editora, String> telefoneEditoraCol;
+
+    // --- COMPONENTES FXML: USUÁRIO ---
+    @FXML private TextField idUsuarioField;
+    @FXML private TextField nomeUsuarioField;
+    @FXML private TextField emailUsuarioField;
+    @FXML private TextField telefoneUsuarioField;
+    @FXML private PasswordField senhaUsuarioField;
+    @FXML private Button adicionarUsuarioButton;
+    @FXML private Button atualizarUsuarioButton;
+    @FXML private Button deletarUsuarioButton;
+    @FXML private Button salvarUsuarioButton;
+    @FXML private Button cancelarUsuarioButton;
+    @FXML private TableView<Usuario> tabelaUsuario;
+    @FXML private TableColumn<Usuario, Integer> idUsuarioCol;
+    @FXML private TableColumn<Usuario, String> nomeUsuarioCol;
+    @FXML private TableColumn<Usuario, String> emailUsuarioCol;
+    @FXML private TableColumn<Usuario, String> telefoneUsuarioCol;
+    //endregion
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // --- INICIALIZAÇÃO DA ABA DE LIVROS ---
+        setupEmprestimosTab();
         setupLivrosTab();
-        
-        // --- INICIALIZAÇÃO DA ABA DE AUTORES ---
         setupAutoresTab();
-
-        // Carregar dados iniciais
-        tabela.setItems(loadAllLivrosView());
-        tabelaAutor.setItems(loadAllAutores());
-        loadAutoresIntoComboBox();
+        setupEditorasTab();
+        setupUsuariosTab();
     }
-    
-    private void setupLivrosTab() {
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tituloCol.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        autorCol.setCellValueFactory(new PropertyValueFactory<>("autor"));
-        anoPublicacaoCol.setCellValueFactory(new PropertyValueFactory<>("anoPublicacao"));
-        precoCol.setCellValueFactory(new PropertyValueFactory<>("preco"));
-        dataCadastroCol.setCellValueFactory(new PropertyValueFactory<>("dataCadastro"));
 
-        tabela.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> handleLivroSelected(newValue));
+    //region Empréstimos
+    private void setupEmprestimosTab() {
+        idEmprestimoCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        usuarioEmprestimoCol.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        livroEmprestimoCol.setCellValueFactory(new PropertyValueFactory<>("livro"));
+        dataEmprestimoCol.setCellValueFactory(new PropertyValueFactory<>("dataEmprestimo"));
+        dataDevolucaoPrevistaCol.setCellValueFactory(new PropertyValueFactory<>("dataDevolucaoPrevista"));
+        dataDevolucaoRealCol.setCellValueFactory(new PropertyValueFactory<>("dataDevolucaoReal"));
+
+        tabelaEmprestimo.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> handleEmprestimoSelected(newV));
+        loadEmprestimosData();
+        setEmprestimoFormState(FormState.INITIAL);
+    }
+
+    private void loadEmprestimosData() {
+        tabelaEmprestimo.setItems(FXCollections.observableArrayList(
+            emprestimoRepo.loadAll().stream().map(this::emprestimoModelToView).collect(Collectors.toList())
+        ));
+        emprestimoUsuarioComboBox.setItems(FXCollections.observableArrayList(usuarioRepo.loadAll()));
+        emprestimoLivroComboBox.setItems(FXCollections.observableArrayList(livroRepo.loadAll()));
+    }
+
+    private void handleEmprestimoSelected(EmprestimoView view) {
+        if (view != null) {
+            Emprestimo emprestimo = emprestimoRepo.loadById(view.getId());
+            if (emprestimo != null) {
+                idEmprestimoField.setText(String.valueOf(emprestimo.getId()));
+                emprestimoUsuarioComboBox.setValue(emprestimo.getUsuario());
+                emprestimoLivroComboBox.setValue(emprestimo.getLivro());
+                dataEmprestimoPicker.setValue(dateToLocalDate(emprestimo.getDataEmprestimo()));
+                dataDevolucaoPrevistaPicker.setValue(dateToLocalDate(emprestimo.getDataDevolucaoPrevista()));
+                dataDevolucaoRealPicker.setValue(dateToLocalDate(emprestimo.getDataDevolucaoReal()));
+                setEmprestimoFormState(FormState.VIEWING);
+            }
+        } else {
+            clearEmprestimoForm();
+            setEmprestimoFormState(FormState.INITIAL);
+        }
+    }
+
+    @FXML private void handleAdicionarEmprestimo() {
+        clearEmprestimoForm();
+        setEmprestimoFormState(FormState.ADDING);
+        dataEmprestimoPicker.setValue(LocalDate.now());
+        dataDevolucaoPrevistaPicker.setValue(LocalDate.now().plusWeeks(2));
+    }
+
+    @FXML private void handleRegistrarDevolucao() {
+        if (tabelaEmprestimo.getSelectionModel().getSelectedItem() != null) {
+            setEmprestimoFormState(FormState.EDITING_DEVOLUCAO);
+            dataDevolucaoRealPicker.setValue(LocalDate.now());
+        }
+    }
+
+    @FXML private void handleSalvarEmprestimo() {
+        try {
+            Emprestimo emprestimo;
+            if (idEmprestimoField.getText().isEmpty()) {
+                emprestimo = new Emprestimo();
+            } else {
+                emprestimo = emprestimoRepo.loadById(Integer.parseInt(idEmprestimoField.getText()));
+            }
+
+            emprestimo.setUsuario(emprestimoUsuarioComboBox.getValue());
+            emprestimo.setLivro(emprestimoLivroComboBox.getValue());
+            emprestimo.setDataEmprestimo(localDateToDate(dataEmprestimoPicker.getValue()));
+            emprestimo.setDataDevolucaoPrevista(localDateToDate(dataDevolucaoPrevistaPicker.getValue()));
+            emprestimo.setDataDevolucaoReal(localDateToDate(dataDevolucaoRealPicker.getValue()));
+
+            if (emprestimo.getId() == 0) {
+                emprestimoRepo.create(emprestimo);
+                showAlert(Alert.AlertType.INFORMATION, "Empréstimo registrado!");
+            } else {
+                emprestimoRepo.update(emprestimo);
+                showAlert(Alert.AlertType.INFORMATION, "Empréstimo atualizado!");
+            }
+            loadEmprestimosData();
+            tabelaEmprestimo.getSelectionModel().select(emprestimoModelToView(emprestimo));
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro ao salvar: " + e.getMessage());
+        }
+    }
+
+    @FXML private void handleCancelarEmprestimo() {
+        handleEmprestimoSelected(tabelaEmprestimo.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML private void handleDeletarEmprestimo() {
+        EmprestimoView selected = tabelaEmprestimo.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            emprestimoRepo.delete(emprestimoRepo.loadById(selected.getId()));
+            showAlert(Alert.AlertType.INFORMATION, "Registro de empréstimo excluído.");
+            loadEmprestimosData();
+        }
+    }
+
+    private void setEmprestimoFormState(FormState state) {
+        boolean isViewing = (state == FormState.INITIAL || state == FormState.VIEWING);
+        emprestimoUsuarioComboBox.setDisable(state != FormState.ADDING);
+        emprestimoLivroComboBox.setDisable(state != FormState.ADDING);
+        dataEmprestimoPicker.setDisable(state != FormState.ADDING);
+        dataDevolucaoPrevistaPicker.setDisable(state != FormState.ADDING);
+        dataDevolucaoRealPicker.setDisable(state != FormState.EDITING_DEVOLUCAO);
+
+        adicionarEmprestimoButton.setDisable(!isViewing);
+        salvarEmprestimoButton.setDisable(isViewing);
+        cancelarEmprestimoButton.setDisable(isViewing);
+        deletarEmprestimoButton.setDisable(state != FormState.VIEWING);
         
+        boolean devolvido = dataDevolucaoRealPicker.getValue() != null;
+        registrarDevolucaoButton.setDisable(state != FormState.VIEWING || devolvido);
+    }
+
+    private void clearEmprestimoForm() {
+        idEmprestimoField.clear();
+        emprestimoUsuarioComboBox.setValue(null);
+        emprestimoLivroComboBox.setValue(null);
+        dataEmprestimoPicker.setValue(null);
+        dataDevolucaoPrevistaPicker.setValue(null);
+        dataDevolucaoRealPicker.setValue(null);
+    }
+    //endregion
+
+    //region Livros
+    private void setupLivrosTab() {
+        idLivroCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tituloLivroCol.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        autorLivroCol.setCellValueFactory(new PropertyValueFactory<>("autor"));
+        editoraLivroCol.setCellValueFactory(new PropertyValueFactory<>("editora"));
+        anoPublicacaoLivroCol.setCellValueFactory(new PropertyValueFactory<>("anoPublicacao"));
+        precoLivroCol.setCellValueFactory(new PropertyValueFactory<>("preco"));
+
+        tabelaLivro.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> handleLivroSelected(newV));
+        loadLivrosData();
         setLivroFormState(FormState.INITIAL);
     }
-    
+
+    private void loadLivrosData() {
+        tabelaLivro.setItems(FXCollections.observableArrayList(
+            livroRepo.loadAll().stream().map(this::livroModelToView).collect(Collectors.toList())
+        ));
+        livroAutorComboBox.setItems(FXCollections.observableArrayList(autorRepo.loadAll()));
+        livroEditoraComboBox.setItems(FXCollections.observableArrayList(editoraRepo.loadAll()));
+    }
+
+    private void handleLivroSelected(LivroView view) {
+        if (view != null) {
+            Livro livro = livroRepo.loadById(view.getId());
+            if (livro != null) {
+                idLivroField.setText(String.valueOf(livro.getId()));
+                tituloLivroField.setText(livro.getTitulo());
+                anoPublicacaoLivroField.setText(String.valueOf(livro.getAnoPublicacao()));
+                precoLivroField.setText(String.format("%.2f", livro.getPreco()).replace(".", ","));
+                livroAutorComboBox.setValue(livro.getAutor());
+                livroEditoraComboBox.setValue(livro.getEditora());
+                setLivroFormState(FormState.VIEWING);
+            }
+        } else {
+            clearLivroForm();
+            setLivroFormState(FormState.INITIAL);
+        }
+    }
+
+    @FXML private void handleAdicionarLivro() {
+        clearLivroForm();
+        setLivroFormState(FormState.ADDING);
+    }
+
+    @FXML private void handleAtualizarLivro() {
+        if (tabelaLivro.getSelectionModel().getSelectedItem() != null) setLivroFormState(FormState.EDITING);
+    }
+
+    @FXML private void handleSalvarLivro() {
+        try {
+            Livro livro;
+            if (idLivroField.getText().isEmpty()) {
+                livro = new Livro();
+            } else {
+                livro = livroRepo.loadById(Integer.parseInt(idLivroField.getText()));
+            }
+            
+            livro.setTitulo(tituloLivroField.getText());
+            livro.setAnoPublicacao(Integer.parseInt(anoPublicacaoLivroField.getText()));
+            livro.setPreco(Double.parseDouble(precoLivroField.getText().replace(",", ".")));
+            livro.setAutor(livroAutorComboBox.getValue());
+            livro.setEditora(livroEditoraComboBox.getValue());
+
+            if (livro.getId() == 0) {
+                livroRepo.create(livro);
+                showAlert(Alert.AlertType.INFORMATION, "Livro salvo!");
+            } else {
+                livroRepo.update(livro);
+                showAlert(Alert.AlertType.INFORMATION, "Livro atualizado!");
+            }
+            loadLivrosData();
+            tabelaLivro.getSelectionModel().select(livroModelToView(livro));
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro ao salvar livro: " + e.getMessage());
+        }
+    }
+
+    @FXML private void handleCancelarLivro() {
+        handleLivroSelected(tabelaLivro.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML private void handleDeletarLivro() {
+        LivroView selected = tabelaLivro.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            livroRepo.delete(livroRepo.loadById(selected.getId()));
+            showAlert(Alert.AlertType.INFORMATION, "Livro deletado.");
+            loadLivrosData();
+        }
+    }
+
+    private void setLivroFormState(FormState state) {
+        boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
+        tituloLivroField.setDisable(disabled);
+        anoPublicacaoLivroField.setDisable(disabled);
+        precoLivroField.setDisable(disabled);
+        livroAutorComboBox.setDisable(disabled);
+        livroEditoraComboBox.setDisable(disabled);
+        
+        adicionarLivroButton.setDisable(!disabled);
+        salvarLivroButton.setDisable(disabled);
+        cancelarLivroButton.setDisable(disabled);
+        atualizarLivroButton.setDisable(state != FormState.VIEWING);
+        deletarLivroButton.setDisable(state != FormState.VIEWING);
+    }
+
+    private void clearLivroForm() {
+        idLivroField.clear();
+        tituloLivroField.clear();
+        anoPublicacaoLivroField.clear();
+        precoLivroField.clear();
+        livroAutorComboBox.setValue(null);
+        livroEditoraComboBox.setValue(null);
+    }
+    //endregion
+
+    //region Autores
     private void setupAutoresTab() {
         idAutorCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomeAutorCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
         nacionalidadeAutorCol.setCellValueFactory(new PropertyValueFactory<>("nacionalidade"));
-        
-        tabelaAutor.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> handleAutorSelected(newValue));
-                
+        tabelaAutor.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> handleAutorSelected(newV));
+        loadAutoresData();
         setAutorFormState(FormState.INITIAL);
     }
-
-    //region CRUD Livros
-
-    @FXML
-    public void onAdicionarButtonAction() {
-        setLivroFormState(FormState.ADDING);
-        limparCampos();
+    
+    private void loadAutoresData() {
+        tabelaAutor.setItems(FXCollections.observableArrayList(autorRepo.loadAll()));
     }
 
-    @FXML
-    public void onSalvarButtonAction() {
-        try {
-            Livro livro = new Livro();
-            // Se o ID estiver preenchido, é uma atualização
-            if (!idField.getText().isEmpty()) {
-                livro.setId(Integer.parseInt(idField.getText()));
-            }
-
-            livro.setTitulo(tituloField.getText());
-            livro.setAutor(autorComboBox.getSelectionModel().getSelectedItem());
-            livro.setAnoPublicacao(Integer.parseInt(anoPublicacaoField.getText()));
-            String precoTexto = precoField.getText().replace(",", ".");
-            livro.setPreco(Double.parseDouble(precoTexto));
-            livro.setDataCadastro(parseDate(dataCadastroField.getText()));
-            
-            if (livro.getAutor() == null) {
-                showAlert(AlertType.ERROR, "Selecione um autor.");
-                return;
-            }
-
-            if (livro.getId() == 0) {
-                livroRepo.create(livro);
-                showAlert(AlertType.INFORMATION, "Livro salvo com sucesso!");
-            } else {
-                livroRepo.update(livro);
-                showAlert(AlertType.INFORMATION, "Livro atualizado com sucesso!");
-            }
-            
-            tabela.setItems(loadAllLivrosView());
-            tabela.getSelectionModel().select(modelToView(livro));
-            setLivroFormState(FormState.VIEWING);
-            
-        } catch (NumberFormatException e) {
-            showAlert(AlertType.ERROR, "Erro de formato numérico: Verifique 'Ano' e 'Preço'.");
-        } catch (ParseException e) {
-            showAlert(AlertType.ERROR, "Formato de data inválido. Use DD/MM/AAAA.");
-        }
-    }
-    
-    @FXML
-    public void onAtualizarButtonAction() {
-        setLivroFormState(FormState.EDITING);
-    }
-    
-    @FXML
-    public void onDeletarButtonAction() {
-        LivroView selected = tabela.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            Livro livroToDelete = livroRepo.loadFromId(selected.getId());
-            if (livroToDelete != null) {
-                livroRepo.delete(livroToDelete);
-                tabela.getItems().remove(selected);
-                limparCampos();
-                setLivroFormState(FormState.INITIAL);
-                showAlert(AlertType.INFORMATION, "Livro deletado com sucesso.");
-            }
-        } else {
-            showAlert(AlertType.WARNING, "Selecione um livro para deletar.");
-        }
-    }
-    
-    @FXML
-    public void onCancelarButtonAction() {
-        LivroView selected = tabela.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            handleLivroSelected(selected);
-            setLivroFormState(FormState.VIEWING);
-        } else {
-            limparCampos();
-            setLivroFormState(FormState.INITIAL);
-        }
-    }
-    
-    private void handleLivroSelected(LivroView newSelection) {
-        if (newSelection != null) {
-            idField.setText(String.valueOf(newSelection.getId()));
-            tituloField.setText(newSelection.getTitulo());
-            anoPublicacaoField.setText(String.valueOf(newSelection.getAnoPublicacao()));
-            precoField.setText(String.format("%.2f", newSelection.getPreco()).replace(".", ","));
-            dataCadastroField.setText(newSelection.getDataCadastro());
-            
-            // Seleciona o autor correspondente no ComboBox
-            Autor autorDoLivro = livroRepo.loadFromId(newSelection.getId()).getAutor();
-            autorComboBox.getSelectionModel().select(autorDoLivro);
-            
-            setLivroFormState(FormState.VIEWING);
-        } else {
-            limparCampos();
-            setLivroFormState(FormState.INITIAL);
-        }
-    }
-    
-    //endregion
-    
-    //region CRUD Autores
-
-    @FXML
-    private void onAdicionarAutorAction() {
-        setAutorFormState(FormState.ADDING);
-        limparCamposAutor();
-    }
-    
-    @FXML
-    private void onSalvarAutorAction() {
-        String nome = nomeAutorField.getText();
-        String nacionalidade = nacionalidadeAutorField.getText();
-        if (nome == null || nome.trim().isEmpty()) {
-            showAlert(AlertType.ERROR, "O nome do autor não pode ser vazio.");
-            return;
-        }
-
-        Autor autor;
-        if (idAutorField.getText().isEmpty()) {
-            autor = new Autor(nome, nacionalidade);
-            autorRepo.create(autor);
-            showAlert(AlertType.INFORMATION, "Autor salvo com sucesso!");
-        } else {
-            autor = tabelaAutor.getSelectionModel().getSelectedItem();
-            autor.setNome(nome);
-            autor.setNacionalidade(nacionalidade);
-            autorRepo.update(autor);
-            showAlert(AlertType.INFORMATION, "Autor atualizado com sucesso!");
-        }
-
-        tabelaAutor.setItems(loadAllAutores());
-        loadAutoresIntoComboBox();
-        tabelaAutor.getSelectionModel().select(autor);
-        setAutorFormState(FormState.VIEWING);
-    }
-
-    @FXML
-    private void onAtualizarAutorAction() {
-        setAutorFormState(FormState.EDITING);
-    }
-    
-    @FXML
-    private void onDeletarAutorAction() {
-        Autor selected = tabelaAutor.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            // VERIFICAÇÃO: Não permitir deletar autor se ele estiver em uso.
-            long count = livroRepo.loadAll().stream().filter(l -> l.getAutor().getId() == selected.getId()).count();
-            if (count > 0) {
-                showAlert(AlertType.ERROR, "Não é possível deletar este autor, pois ele está associado a " + count + " livro(s).");
-                return;
-            }
-            autorRepo.delete(selected);
-            tabelaAutor.getItems().remove(selected);
-            loadAutoresIntoComboBox();
-            limparCamposAutor();
-            setAutorFormState(FormState.INITIAL);
-            showAlert(AlertType.INFORMATION, "Autor deletado com sucesso.");
-        } else {
-            showAlert(AlertType.WARNING, "Selecione um autor para deletar.");
-        }
-    }
-    
-    @FXML
-    private void onCancelarAutorAction() {
-        Autor selected = tabelaAutor.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            handleAutorSelected(selected);
-            setAutorFormState(FormState.VIEWING);
-        } else {
-            limparCamposAutor();
-            setAutorFormState(FormState.INITIAL);
-        }
-    }
-    
     private void handleAutorSelected(Autor autor) {
         if (autor != null) {
             idAutorField.setText(String.valueOf(autor.getId()));
@@ -294,168 +390,326 @@ public class AppController implements Initializable {
             nacionalidadeAutorField.setText(autor.getNacionalidade());
             setAutorFormState(FormState.VIEWING);
         } else {
-            limparCamposAutor();
+            clearAutorForm();
             setAutorFormState(FormState.INITIAL);
         }
     }
-    
-    //endregion
 
-    //region Utilitários e Helpers
-
-    private enum FormState { INITIAL, VIEWING, ADDING, EDITING }
-
-    private void setLivroFormState(FormState state) {
-        boolean fieldsDisabled = state == FormState.INITIAL || state == FormState.VIEWING;
-        tituloField.setDisable(fieldsDisabled);
-        autorComboBox.setDisable(fieldsDisabled);
-        anoPublicacaoField.setDisable(fieldsDisabled);
-        precoField.setDisable(fieldsDisabled);
-        dataCadastroField.setDisable(fieldsDisabled);
-
-        adicionarButton.setDisable(state == FormState.ADDING || state == FormState.EDITING);
-        atualizarButton.setDisable(state != FormState.VIEWING);
-        deletarButton.setDisable(state != FormState.VIEWING);
-        salvarButton.setDisable(state == FormState.INITIAL || state == FormState.VIEWING);
-        cancelarButton.setDisable(state == FormState.INITIAL || state == FormState.VIEWING);
+    @FXML private void handleAdicionarAutor() {
+        clearAutorForm();
+        setAutorFormState(FormState.ADDING);
     }
-    
-    private void setAutorFormState(FormState state) {
-        boolean fieldsDisabled = state == FormState.INITIAL || state == FormState.VIEWING;
-        nomeAutorField.setDisable(fieldsDisabled);
-        nacionalidadeAutorField.setDisable(fieldsDisabled);
 
-        adicionarAutorButton.setDisable(state == FormState.ADDING || state == FormState.EDITING);
+    @FXML private void handleAtualizarAutor() {
+        if (tabelaAutor.getSelectionModel().getSelectedItem() != null) setAutorFormState(FormState.EDITING);
+    }
+
+    @FXML private void handleSalvarAutor() {
+        try {
+            Autor autor;
+            if (idAutorField.getText().isEmpty()) {
+                autor = new Autor();
+            } else {
+                autor = autorRepo.loadById(Integer.parseInt(idAutorField.getText()));
+            }
+            autor.setNome(nomeAutorField.getText());
+            autor.setNacionalidade(nacionalidadeAutorField.getText());
+
+            if (autor.getId() == 0) {
+                autorRepo.create(autor);
+                showAlert(Alert.AlertType.INFORMATION, "Autor salvo!");
+            } else {
+                autorRepo.update(autor);
+                showAlert(Alert.AlertType.INFORMATION, "Autor atualizado!");
+            }
+            loadAutoresData();
+            tabelaAutor.getSelectionModel().select(autor);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro ao salvar autor: " + e.getMessage());
+        }
+    }
+
+    @FXML private void handleCancelarAutor() {
+        handleAutorSelected(tabelaAutor.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML private void handleDeletarAutor() {
+        Autor selected = tabelaAutor.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            autorRepo.delete(selected);
+            showAlert(Alert.AlertType.INFORMATION, "Autor deletado.");
+            loadAutoresData();
+        }
+    }
+
+    private void setAutorFormState(FormState state) {
+        boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
+        nomeAutorField.setDisable(disabled);
+        nacionalidadeAutorField.setDisable(disabled);
+        adicionarAutorButton.setDisable(!disabled);
+        salvarAutorButton.setDisable(disabled);
+        cancelarAutorButton.setDisable(disabled);
         atualizarAutorButton.setDisable(state != FormState.VIEWING);
         deletarAutorButton.setDisable(state != FormState.VIEWING);
-        salvarAutorButton.setDisable(state == FormState.INITIAL || state == FormState.VIEWING);
-        cancelarAutorButton.setDisable(state == FormState.INITIAL || state == FormState.VIEWING);
     }
 
-    private ObservableList<LivroView> loadAllLivrosView() {
-        ObservableList<LivroView> lista = FXCollections.observableArrayList();
-        List<Livro> listaFromDb = livroRepo.loadAll();
-        for (Livro livro : listaFromDb) {
-            lista.add(modelToView(livro));
+    private void clearAutorForm() {
+        idAutorField.clear();
+        nomeAutorField.clear();
+        nacionalidadeAutorField.clear();
+    }
+    //endregion
+
+    //region Editoras
+    private void setupEditorasTab() {
+        idEditoraCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nomeEditoraCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        enderecoEditoraCol.setCellValueFactory(new PropertyValueFactory<>("endereco"));
+        telefoneEditoraCol.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        tabelaEditora.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> handleEditoraSelected(newV));
+        loadEditorasData();
+        setEditoraFormState(FormState.INITIAL);
+    }
+
+    private void loadEditorasData() {
+        tabelaEditora.setItems(FXCollections.observableArrayList(editoraRepo.loadAll()));
+    }
+
+    private void handleEditoraSelected(Editora editora) {
+        if (editora != null) {
+            idEditoraField.setText(String.valueOf(editora.getId()));
+            nomeEditoraField.setText(editora.getNome());
+            enderecoEditoraField.setText(editora.getEndereco());
+            telefoneEditoraField.setText(editora.getTelefone());
+            setEditoraFormState(FormState.VIEWING);
+        } else {
+            clearEditoraForm();
+            setEditoraFormState(FormState.INITIAL);
         }
-        return lista;
-    }
-    
-    private ObservableList<Autor> loadAllAutores() {
-        return FXCollections.observableArrayList(autorRepo.loadAll());
     }
 
-    private void loadAutoresIntoComboBox() {
-        autorComboBox.setItems(loadAllAutores());
+    @FXML private void handleAdicionarEditora() {
+        clearEditoraForm();
+        setEditoraFormState(FormState.ADDING);
     }
 
-    private LivroView modelToView(Livro livro) {
-        String nomeAutor = (livro.getAutor() != null) ? livro.getAutor().getNome() : "Autor Desconhecido";
-        return new LivroView(
-                livro.getId(),
-                livro.getTitulo(),
-                nomeAutor,
-                livro.getAnoPublicacao(),
-                livro.getPreco(),
-                livro.printDataCadastro()
-        );
+    @FXML private void handleAtualizarEditora() {
+        if (tabelaEditora.getSelectionModel().getSelectedItem() != null) setEditoraFormState(FormState.EDITING);
     }
-    
-    private Date parseDate(String dateString) throws ParseException {
-        if (dateString == null || dateString.trim().isEmpty()) {
-            return new Date();
+
+    @FXML private void handleSalvarEditora() {
+        try {
+            Editora editora;
+            if (idEditoraField.getText().isEmpty()) {
+                editora = new Editora();
+            } else {
+                editora = editoraRepo.loadById(Integer.parseInt(idEditoraField.getText()));
+            }
+            editora.setNome(nomeEditoraField.getText());
+            editora.setEndereco(enderecoEditoraField.getText());
+            editora.setTelefone(telefoneEditoraField.getText());
+
+            if (editora.getId() == 0) {
+                editoraRepo.create(editora);
+                showAlert(Alert.AlertType.INFORMATION, "Editora salva!");
+            } else {
+                editoraRepo.update(editora);
+                showAlert(Alert.AlertType.INFORMATION, "Editora atualizada!");
+            }
+            loadEditorasData();
+            tabelaEditora.getSelectionModel().select(editora);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro ao salvar editora: " + e.getMessage());
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateFormat.setLenient(false);
-        return dateFormat.parse(dateString);
     }
 
-    private void showAlert(AlertType type, String message) {
+    @FXML private void handleCancelarEditora() {
+        handleEditoraSelected(tabelaEditora.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML private void handleDeletarEditora() {
+        Editora selected = tabelaEditora.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            editoraRepo.delete(selected);
+            showAlert(Alert.AlertType.INFORMATION, "Editora deletada.");
+            loadEditorasData();
+        }
+    }
+
+    private void setEditoraFormState(FormState state) {
+        boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
+        nomeEditoraField.setDisable(disabled);
+        enderecoEditoraField.setDisable(disabled);
+        telefoneEditoraField.setDisable(disabled);
+        adicionarEditoraButton.setDisable(!disabled);
+        salvarEditoraButton.setDisable(disabled);
+        cancelarEditoraButton.setDisable(disabled);
+        atualizarEditoraButton.setDisable(state != FormState.VIEWING);
+        deletarEditoraButton.setDisable(state != FormState.VIEWING);
+    }
+
+    private void clearEditoraForm() {
+        idEditoraField.clear();
+        nomeEditoraField.clear();
+        enderecoEditoraField.clear();
+        telefoneEditoraField.clear();
+    }
+    //endregion
+
+    //region Usuários
+    private void setupUsuariosTab() {
+        idUsuarioCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nomeUsuarioCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        emailUsuarioCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        telefoneUsuarioCol.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        tabelaUsuario.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> handleUsuarioSelected(newV));
+        loadUsuariosData();
+        setUsuarioFormState(FormState.INITIAL);
+    }
+
+    private void loadUsuariosData() {
+        tabelaUsuario.setItems(FXCollections.observableArrayList(usuarioRepo.loadAll()));
+    }
+
+    private void handleUsuarioSelected(Usuario usuario) {
+        if (usuario != null) {
+            idUsuarioField.setText(String.valueOf(usuario.getId()));
+            nomeUsuarioField.setText(usuario.getNome());
+            emailUsuarioField.setText(usuario.getEmail());
+            telefoneUsuarioField.setText(usuario.getTelefone());
+            senhaUsuarioField.clear();
+            setUsuarioFormState(FormState.VIEWING);
+        } else {
+            clearUsuarioForm();
+            setUsuarioFormState(FormState.INITIAL);
+        }
+    }
+
+    @FXML private void handleAdicionarUsuario() {
+        clearUsuarioForm();
+        setUsuarioFormState(FormState.ADDING);
+    }
+
+    @FXML private void handleAtualizarUsuario() {
+        if (tabelaUsuario.getSelectionModel().getSelectedItem() != null) setUsuarioFormState(FormState.EDITING);
+    }
+
+    @FXML private void handleSalvarUsuario() {
+        try {
+            Usuario usuario;
+            if (idUsuarioField.getText().isEmpty()) {
+                usuario = new Usuario();
+            } else {
+                usuario = usuarioRepo.loadById(Integer.parseInt(idUsuarioField.getText()));
+            }
+            usuario.setNome(nomeUsuarioField.getText());
+            usuario.setEmail(emailUsuarioField.getText());
+            usuario.setTelefone(telefoneUsuarioField.getText());
+
+            if (senhaUsuarioField.getText() != null && !senhaUsuarioField.getText().isEmpty()) {
+                usuario.setSenha(senhaUsuarioField.getText()); // Idealmente, usar hash
+            } else if (usuario.getId() == 0) {
+                throw new Exception("Senha é obrigatória para novos usuários.");
+            }
+
+            if (usuario.getId() == 0) {
+                usuarioRepo.create(usuario);
+                showAlert(Alert.AlertType.INFORMATION, "Usuário salvo!");
+            } else {
+                usuarioRepo.update(usuario);
+                showAlert(Alert.AlertType.INFORMATION, "Usuário atualizado!");
+            }
+            loadUsuariosData();
+            tabelaUsuario.getSelectionModel().select(usuario);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erro ao salvar usuário: " + e.getMessage());
+        }
+    }
+
+    @FXML private void handleCancelarUsuario() {
+        handleUsuarioSelected(tabelaUsuario.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML private void handleDeletarUsuario() {
+        Usuario selected = tabelaUsuario.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            usuarioRepo.delete(selected);
+            showAlert(Alert.AlertType.INFORMATION, "Usuário deletado.");
+            loadUsuariosData();
+        }
+    }
+
+    private void setUsuarioFormState(FormState state) {
+        boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
+        nomeUsuarioField.setDisable(disabled);
+        emailUsuarioField.setDisable(disabled);
+        telefoneUsuarioField.setDisable(disabled);
+        senhaUsuarioField.setDisable(disabled);
+        adicionarUsuarioButton.setDisable(!disabled);
+        salvarUsuarioButton.setDisable(disabled);
+        cancelarUsuarioButton.setDisable(disabled);
+        atualizarUsuarioButton.setDisable(state != FormState.VIEWING);
+        deletarUsuarioButton.setDisable(state != FormState.VIEWING);
+    }
+
+    private void clearUsuarioForm() {
+        idUsuarioField.clear();
+        nomeUsuarioField.clear();
+        emailUsuarioField.clear();
+        telefoneUsuarioField.clear();
+        senhaUsuarioField.clear();
+    }
+    //endregion
+
+    //region Helpers & Menu Actions
+    private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
         alert.setTitle("Informação do Sistema");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
-    private void limparCampos() {
-        tabela.getSelectionModel().clearSelection();
-        idField.clear();
-        tituloField.clear();
-        autorComboBox.getSelectionModel().clearSelection();
-        anoPublicacaoField.clear();
-        precoField.clear();
-        dataCadastroField.clear();
-    }
-    
-    private void limparCamposAutor() {
-        tabelaAutor.getSelectionModel().clearSelection();
-        idAutorField.clear();
-        nomeAutorField.clear();
-        nacionalidadeAutorField.clear();
+
+    private LivroView livroModelToView(Livro livro) {
+        String autorNome = livro.getAutor() != null ? livro.getAutor().getNome() : "N/D";
+        String editoraNome = livro.getEditora() != null ? livro.getEditora().getNome() : "N/D";
+        return new LivroView(livro.getId(), livro.getTitulo(), autorNome, editoraNome, livro.getAnoPublicacao(), livro.getPreco());
     }
 
-    //endregion
+    private EmprestimoView emprestimoModelToView(Emprestimo e) {
+        return new EmprestimoView(
+            e.getId(),
+            e.getUsuario() != null ? e.getUsuario().getNome() : "N/D",
+            e.getLivro() != null ? e.getLivro().getTitulo() : "N/D",
+            formatDate(e.getDataEmprestimo()),
+            formatDate(e.getDataDevolucaoPrevista()),
+            formatDate(e.getDataDevolucaoReal())
+        );
+    }
 
-    //region Métodos do Menu (Importar/Exportar, etc.)
+    private String formatDate(Date date) {
+        if (date == null) return "";
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter);
+    }
 
-    @FXML private void onNovoDBAction(ActionEvent event) { showAlert(AlertType.INFORMATION, "Funcionalidade não implementada."); }
-    @FXML private void onAbrirDBAction(ActionEvent event) { showAlert(AlertType.INFORMATION, "Funcionalidade não implementada."); }
-    @FXML private void onSairAction(ActionEvent event) { System.exit(0); }
-    @FXML private void onLimparCamposAction(ActionEvent event) { onCancelarButtonAction(); }
-    
+    private LocalDate dateToLocalDate(Date date) {
+        if (date == null) return null;
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private Date localDateToDate(LocalDate localDate) {
+        if (localDate == null) return null;
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
     @FXML
-    private void onAtualizarTabelaAction(ActionEvent event) {
-        tabela.setItems(loadAllLivrosView());
-        tabelaAutor.setItems(loadAllAutores());
-        loadAutoresIntoComboBox();
-        showAlert(AlertType.INFORMATION, "Tabelas atualizadas!");
+    private void onSairAction(ActionEvent event) {
+        System.exit(0);
     }
 
     @FXML
     private void onSobreAction(ActionEvent event) {
-        showAlert(AlertType.INFORMATION, "Sistema de Gerenciamento de Livros v1.0\nDesenvolvido por [Seu Nome]");
+        showAlert(Alert.AlertType.INFORMATION, "Sistema de Gerenciamento de Biblioteca v2.0");
     }
-    
-    @FXML
-    private void onExportarJSONAction(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exportar para JSON");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos JSON", "*.json"));
-        File file = fileChooser.showSaveDialog(null);
-        if (file != null) {
-            if (livroRepo.dumpFile("JSON", file)) {
-                showAlert(AlertType.INFORMATION, "Dados exportados com sucesso!");
-            } else {
-                showAlert(AlertType.ERROR, "Erro ao exportar dados.");
-            }
-        }
-    }
-    
-    @FXML
-    private void onExportarXMLAction(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exportar para XML");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos XML", "*.xml"));
-        File file = fileChooser.showSaveDialog(null);
-        if (file != null) {
-            if (livroRepo.dumpFile("XML", file)) {
-                showAlert(AlertType.INFORMATION, "Dados exportados com sucesso!");
-            } else {
-                showAlert(AlertType.ERROR, "Erro ao exportar dados.");
-            }
-        }
-    }
-    
-    @FXML
-    private void onImportarJSONAction(ActionEvent event) {
-        showAlert(AlertType.WARNING, "A importação ainda não suporta a relação com autores.");
-    }
-
-    @FXML
-    private void onImportarXMLAction(ActionEvent event) {
-        showAlert(AlertType.WARNING, "A importação ainda não suporta a relação com autores.");
-    }
-    
     //endregion
 }
