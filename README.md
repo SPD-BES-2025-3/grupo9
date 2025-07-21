@@ -87,18 +87,20 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca desktop comp
 
 ### Como Instalar e Executar o Código Inicial
 
-
 1. BlueJ: Inclui passos para abrir o projeto, adicionar as bibliotecas JAR (SQLite JDBC, ORMLite Core, ORMLite JDBC, Gson, e dependências JAXB para JDK 11+) e configurar as VM Options do JavaFX.
 
  2. Linha de Comando: Fornece comandos javac para compilação e java para execução, com as configurações --module-path e --add-modules para JavaFX, e --cp para o classpath das bibliotecas.
 
 3. Outras IDEs (IntelliJ IDEA, Eclipse): Orientações gerais para importar o projeto, configurar o JDK, adicionar o JavaFX SDK como biblioteca modular e incluir os demais JARs como bibliotecas de projeto, além de definir as VM Options.
 
+### Passo a passo de como execultar os Projetos 
+* [Sistema de Gerenciamento de Biblioteca API RestFull](https://github.com/SPD-BES-2025-3/grupo9/blob/main/api_rest_full_application/README.md)
+* [Sistema de Gerenciamento de Biblioteca JavaFX](https://github.com/SPD-BES-2025-3/grupo9/blob/main/api_rest_full_application/README.md)
+
 ### Documentação de Código
 O projeto utiliza:
 
 * Markdown: O arquivo README.md serve como a documentação principal do projeto, descrevendo suas funcionalidades, tecnologias e instruções de execução. 
-
 * JavaDoc: Algumas classes, como Database.java e AppView.java, contêm comentários Javadoc para descrever a finalidade da classe, autor e versão.
 
 
