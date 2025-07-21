@@ -23,6 +23,9 @@ public class Livro {
     @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false, columnName = "autor_id")
     @XmlElement
     private Autor autor;
+    
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false, columnName = "editora_id")
+    private Editora editora;
 
     @DatabaseField
     @XmlElement
@@ -51,10 +54,17 @@ public class Livro {
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public Autor getAutor() { return this.autor; }
     public void setAutor(Autor autor) { this.autor = autor; }
+    public Editora getEditora() { return editora; }
+    public void setEditora(Editora editora) { this.editora = editora; }
     public int getAnoPublicacao() { return this.anoPublicacao; }
     public void setAnoPublicacao(int anoPublicacao) { this.anoPublicacao = anoPublicacao; }
     public double getPreco() { return this.preco; }
     public void setPreco(double preco) { this.preco = preco; }
     public Date getDataCadastro() { return this.dataCadastro; }
     public void setDataCadastro(Date dataCadastro) { this.dataCadastro = dataCadastro; }
+    
+    @Override
+    public String toString() {
+        return this.titulo;
+    }
 }
