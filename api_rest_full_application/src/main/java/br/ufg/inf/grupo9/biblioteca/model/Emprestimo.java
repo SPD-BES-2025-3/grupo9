@@ -10,7 +10,7 @@ import java.util.Date;
 public class Emprestimo {
 
     @Id
-    private Long id;
+    private String id;
 
     @DBRef
     private Usuario usuario;
@@ -26,18 +26,18 @@ public class Emprestimo {
 
     public Emprestimo() {}
 
-    public Emprestimo(Long id, Usuario usuario, Livro livro) {
+    public Emprestimo(String id, Usuario usuario, Livro livro) {
         this.id = id;
         this.usuario = usuario;
         this.livro = livro;
         this.dataEmprestimo = new Date();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

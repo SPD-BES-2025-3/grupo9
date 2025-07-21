@@ -7,17 +7,25 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Autor {
 
     @Id
-    private Long id;
+    private String id;
 
     private String nome;
 
     private String nacionalidade;
 
-    public Long getId() {
+    Autor() {}
+
+    Autor(String id, String nome, String nacionalidade) {
+        this.id = id;
+        this.nome = nome;
+        this.nacionalidade = nacionalidade;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

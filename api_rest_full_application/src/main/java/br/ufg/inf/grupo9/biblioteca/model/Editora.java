@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Editora {
 
     @Id
-    private Long id;
+    private String id;
 
     private String nome;
 
@@ -17,17 +17,18 @@ public class Editora {
 
     public Editora() {}
 
-    public Editora(String nome, String endereco, String telefone) {
+    public Editora(String id, String nome, String endereco, String telefone) {
+        this.id = id;
         this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
