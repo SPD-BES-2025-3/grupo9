@@ -1,4 +1,4 @@
--# 📚 Projeto Biblioteca - Relatório Inicial
+# 📚 Projeto Biblioteca - Relatório Inicial
 
 Este repositório tem como objetivo o documentar as principais atividades realizadas nas primeira etapa desse projeto.
 
