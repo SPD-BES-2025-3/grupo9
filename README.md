@@ -32,41 +32,43 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca desktop comp
 - Testes unitários com JUnit.
 - Integrador de Entidades: uso de Redis, Lettuce e Pub/Sub.
 
-## Divisão de Tarefas API Rest
-
-| Atividade                                                                                                                                               | Data Início | Data Fim | Responsável | Situação  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | --------- | --- |
-| Documentar o Projeto                                                                                                                                    | 18/07       | 21/07    | Thayliny    | Concluida |
-| Produzir o código e a documentação inicial no repositório                                                                                               | 18/07       | 20/07    | Stepahny    | Concluida |
-| Teste Unitario                                                                                                                                          |             |          |             |           |     |
-| Adicionar, atualizar e deletar livros                                                                                                                   |             |          |             |           |     |
-| Visualizar a lista de livros em uma tabela interativa                                                                                                   |             |          |             |           |     |
-| Associar livros a autores existentes usando um ComboBox                                                                                                 |             |          |             |           |     |
-| Adicionar, atualizar e deletar autores                                                                                                                  |             |          |             |           |     |
-| Visualizar a lista de autores em uma tabela                                                                                                             |             |          |             |           |     |
-| Validação para impedir a exclusão de autores vinculados a livros                                                                                        |             |          |             |           |     |
-| Persistência de Dados: Todos os dados são armazenados em um arquivo SQLite (livraria.sqlite), garantindo que as informações persistam entre as sessões. |             |          |             |           |     |
-| Exporte dados de livros ou autores para arquivos JSON ou XML                                                                                            |             |          |             |           |     |
-| Importe dados de livros ou autores de arquivos JSON ou XML                                                                                              |             |          |             |           |     |
-| Contrução de Teste Unitário                                                                                                                             |             |          |             |           |     |
-
 ## Divisão de Tarefas JavaFX
 
+| Atividade                                                                                                                                               | Data Início | Data Fim | Responsável | Situação  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | --------- |
+| Documentar o Projeto                                                                                                                                    | 18/07       | 21/07    | Thayliny    | Concluida |
+| Produzir o código e a documentação inicial no repositório                                                                                               | 18/07       | 20/07    | Stepahny    | Concluida |    
+| Adicionar, atualizar e deletar livros                                                                                                                   | 18/07       | 20/07    | Stepahny    | Concluida |            
+| Visualizar a lista de livros em uma tabela interativa                                                                                                   | 18/07       | 20/07    | Stepahny    | Concluida |         
+| Associar livros a autores existentes usando um ComboBox                                                                                                 | 18/07       | 20/07    | Stepahny    | Concluida |          
+| Adicionar, atualizar e deletar autores                                                                                                                  | 18/07       | 20/07    | Stepahny    | Concluida |   
+| Visualizar a lista de autores em uma tabela                                                                                                             | 18/07       | 20/07    | Stepahny    | Concluida |     
+| Validação para impedir a exclusão de autores vinculados a livros                                                                                        | 18/07       | 20/07    | Stepahny    | Concluida |    
+| Implemtação das  classes usuario, emprestimo, editora                                                                                                  | 18/07       | 20/07    | Stepahny    | Concluida | 
+| Atualização da aplicação desktop                                                                                                                        | 18/07       | 20/07    | Stepahny    | Concluida | 
+| Persistência de Dados: Todos os dados são armazenados em um arquivo SQLite (livraria.sqlite), garantindo que as informações persistam entre as sessões. | 18/07       | 20/07    | Stepahny    | Concluida |        
+| Atualização do Projeto usando JPA                                                                                                                       | 21/07       | 23/07    | Stepahny    | Em adamento |
+| Contrução de Teste Unitário                                                                                                                            | 23/07       | 25/07    | Thayliny    | Em andamento |     
+| Teste Unitario JUnit                                                                                                                                    | 23/07       | 25/07    | Thayliny    | Em andamento | 
+    
+
+## Divisão de Tarefas API Rest 
+
 | Atividade                                                                                                                                               | Data Início | Data Fim | Responsável | Situação     |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ------------ | --- |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ------------ | 
 | Documentar o Projeto                                                                                                                                    | 18/07       | 21/07    | Thayliny    | Concluida    |
-| Produzir o código e a documentação inicial no repositório                                                                                               | 18/07       | 20/07    | Stepahny    | Concluida    |
-| Teste Unitario do Projeto JavaFX                                                                                                                        | 21/07       | 25/07    | Thayliny    | Em andamento |     |
-| Adicionar, atualizar e deletar livros                                                                                                                   |             |          |             |              |     |
-| Visualizar a lista de livros em uma tabela interativa                                                                                                   |             |          |             |              |     |
-| Associar livros a autores existentes usando um ComboBox                                                                                                 |             |          |             |              |     |
-| Adicionar, atualizar e deletar autores                                                                                                                  |             |          |             |              |     |
-| Visualizar a lista de autores em uma tabela                                                                                                             |             |          |             |              |     |
-| Validação para impedir a exclusão de autores vinculados a livros                                                                                        |             |          |             |              |     |
-| Persistência de Dados: Todos os dados são armazenados em um arquivo SQLite (livraria.sqlite), garantindo que as informações persistam entre as sessões. |             |          |             |              |     |
-| Exporte dados de livros ou autores para arquivos JSON ou XML                                                                                            |             |          |             |              |     |
-| Importe dados de livros ou autores de arquivos JSON ou XML                                                                                              |             |          |             |              |     |
-| Contrução de Teste Unitário                                                                                                                             |             |          |             |              |     |
+| Produzir o código e a documentação inicial no repositório                                                                                               | 21/07       | 25/07    | Vitoria     | Em andamento | 
+| Teste Unitario do Projeto JavaFX                                                                                                                        | 21/07       | 25/07    | Vitoria     | Em andamento |     
+| Adicionar, atualizar e deletar livros                                                                                                                   | 21/07       | 25/07    | Vitoria     | Em andamento |      
+| Visualizar a lista de livros em uma tabela interativa                                                                                                   | 21/07       | 25/07    | Vitoria     | Em andamento |     
+| Associar livros a autores existentes usando um ComboBox                                                                                                 | 21/07       | 25/07    | Vitoria     | Em andamento |     
+| Adicionar, atualizar e deletar autores                                                                                                                  | 21/07       | 25/07    | Vitoria     | Em andamento |      
+| Visualizar a lista de autores em uma tabela                                                                                                             | 21/07       | 25/07    | Vitoria     | Em andamento |     
+| Validação para impedir a exclusão de autores vinculados a livros                                                                                        | 21/07       | 25/07    | Vitoria     | Em andamento |      
+| Persistência de Dados: Todos os dados são armazenados em um arquivo SQLite (livraria.sqlite), garantindo que as informações persistam entre as sessões. | 21/07       | 25/07    | Vitoria     | Em andamento |      
+| Exporte dados de livros ou autores para arquivos JSON ou XML                                                                                            | 21/07       | 25/07    | Vitoria     | Em andamento |     
+| Importe dados de livros ou autores de arquivos JSON ou XML                                                                                              | 21/07       | 25/07    | Vitoria     | Em andamento |   
+| Contrução de Teste Unitário                                                                                                                             | 21/07       | 25/07    | Vitoria     | Em andamento |     
 
 ## Modelagem Inicial
 
