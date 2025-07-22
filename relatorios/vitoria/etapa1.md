@@ -4,9 +4,9 @@ Este repositório tem como objetivo o documentar as principais atividades realiz
 
 ---
 
-## 🚀 Features Iniciais
+## Features Iniciais
 
-### 🔧 feature/estrutura
+### feature/estrutura
 
 - Estruturação inicial do projeto com **Spring Boot**.
 - Adição das dependências e extensões essenciais (MongoDB, Lombok, Spring Web, Spring Data MongoDB, etc).
@@ -16,7 +16,7 @@ Este repositório tem como objetivo o documentar as principais atividades realiz
   - Banco disponível na porta padrão (27017).
 - Criação do arquivo `application.properties` com as configurações do MongoDB.
 
-### 📦 feature/biblioteca-crud
+### feature/biblioteca-crud
 
 - Início da implementação do CRUD de entidades principais (`Livro`, `Autor`, etc).
 - Criação de repositórios com **Spring Data MongoDB**.
