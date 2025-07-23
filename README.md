@@ -2,9 +2,9 @@
 
 **Alunas:**
 
-  - [Stephany Milhomem](https://github.com/StephanyMil)
-  - [Thayliny Moura](https://github.com/thaylinymoura)
-  - [Vitoria Luz](https://github.com/Vitorialuz229)
+  - [Stephany Milhomem](https://github.com/StephanyMil) - [Relatório Individual](https://github.com/SPD-BES-2025-3/grupo9/tree/main/relatorios/stephany)
+  - [Thayliny Moura](https://github.com/thaylinymoura) - [Relatório Individual](https://github.com/SPD-BES-2025-3/grupo9/tree/main/relatorios/thayliny)
+  - [Vitoria Luz](https://github.com/Vitorialuz229) - [Relatório Individual](https://github.com/SPD-BES-2025-3/grupo9/tree/main/relatorios/vitoria)
 
 # Sistema de Gerenciamento de Biblioteca
 
@@ -52,31 +52,39 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca desktop comp
 | Teste Unitario JUnit                                                                                                                                    | 23/07       | 25/07    | Thayliny    | Em andamento | 
     
 
-## Divisão de Tarefas API Rest 
+## Divisão de Tarefas API Rest
 
-| Atividade                                                                                                                                               | Data Início | Data Fim | Responsável | Situação     |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------- | ------------ | 
-| Documentar o Projeto                                                                                                                                    | 18/07       | 21/07    | Thayliny    | Concluida    |
-| Produzir o código e a documentação inicial no repositório                                                                                               | 21/07       | 25/07    | Vitoria     | Em andamento | 
-| Teste Unitario do Projeto JavaFX                                                                                                                        | 21/07       | 25/07    | Vitoria     | Em andamento |     
-| Adicionar, atualizar e deletar livros                                                                                                                   | 21/07       | 25/07    | Vitoria     | Em andamento |      
-| Visualizar a lista de livros em uma tabela interativa                                                                                                   | 21/07       | 25/07    | Vitoria     | Em andamento |     
-| Associar livros a autores existentes usando um ComboBox                                                                                                 | 21/07       | 25/07    | Vitoria     | Em andamento |     
-| Adicionar, atualizar e deletar autores                                                                                                                  | 21/07       | 25/07    | Vitoria     | Em andamento |      
-| Visualizar a lista de autores em uma tabela                                                                                                             | 21/07       | 25/07    | Vitoria     | Em andamento |     
-| Validação para impedir a exclusão de autores vinculados a livros                                                                                        | 21/07       | 25/07    | Vitoria     | Em andamento |      
-| Persistência de Dados: Todos os dados são armazenados em um arquivo SQLite (livraria.sqlite), garantindo que as informações persistam entre as sessões. | 21/07       | 25/07    | Vitoria     | Em andamento |      
-| Exporte dados de livros ou autores para arquivos JSON ou XML                                                                                            | 21/07       | 25/07    | Vitoria     | Em andamento |     
-| Importe dados de livros ou autores de arquivos JSON ou XML                                                                                              | 21/07       | 25/07    | Vitoria     | Em andamento |   
-| Contrução de Teste Unitário                                                                                                                             | 21/07       | 25/07    | Vitoria     | Em andamento |     
+
+| Atividade | Data Início | Data Fim | Responsável | Situação |
+|---|---|---|---|---|
+| Documentar o Projeto (relatório inicial e estrutura) | 18/07 | 21/07 | Thayliny | Concluída |
+| Estruturação inicial do projeto com Spring Boot | 21/07 | 25/07 | Vitoria | Concluída |
+| Adição de dependências e extensões essenciais (MongoDB, Lombok, Spring Web, Spring Data MongoDB, etc) | 21/07 | 25/07 | Vitoria | Concluída |
+| Criação da estrutura de diretórios (controller, service, repository, model, dto) | 21/07 | 25/07 | Vitoria | Concluída |
+| Configuração do ambiente Docker (docker-compose.yml para MongoDB) | 21/07 | 25/07 | Vitoria | Concluída |
+| Criação do arquivo application.properties com configurações do MongoDB | 21/07 | 25/07 | Vitoria | Concluída |
+| Início da implementação do CRUD de entidades principais (Livro, Autor) | 21/07 | 25/07 | Vitoria | Concluída |
+| Criação de repositórios com Spring Data MongoDB | 21/07 | 25/07 | Vitoria | Concluída |
+| Aplicação do padrão Builder com Lombok em DTOs | 21/07 | 25/07 | Vitoria | Em andamento |
+| Criação de modelos iniciais com base no diagrama do projeto | 21/07 | 25/07 | Vitoria | Em andamento |
+| Finalizar os métodos CRUD no controller e service | 22/07 | 26/07 | Vitoria | A Fazer |
+| Criar os testes unitários para os repositórios | 22/07 | 28/07 | Vitoria | A Fazer |
+| Adicionar validações nas entidades e DTOs | 22/07 | 28/07 | Vitoria | A Fazer |
+| Iniciar a documentação da API com Swagger/OpenAPI | 22/07 | 29/07 | Vitoria | A Fazer |
 
 ## Modelagem Inicial
 
 ### Diagrama de Classes com Relações
 
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-classe1.png)
+
 ### Arquitetura do Sistema (MVC)
 
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-componentes.png)
+
 ### Diagrama de Sequência para Operações de Integração
+
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-sequencia.png)
 
 ## Documentação de Código Inicial
 
