@@ -64,8 +64,8 @@ A forma recomendada para executar este projeto é utilizando uma IDE moderna com
     - O Maven irá baixar e configurar automaticamente todas as dependências necessárias (JavaFX, Hibernate, SQLite, etc.). Este processo pode levar um minuto na primeira vez.
 
 4. **Execute a Aplicação:**
-    - Na árvore de projetos, navegue até `src/main/java/br/com/grupo9/view/AppView.java`.
-    - Clique com o botão direito do mouse no arquivo `AppView.java` e selecione **Run 'AppView.main()'**.
+    - Na árvore de projetos, navegue até `src/main/java/br/com/grupo9/view/Main.java`.
+    - Clique com o botão direito do mouse no arquivo `Main.java` e selecione **Run 'Main.main()'**.
     - A interface gráfica do sistema de gerenciamento da biblioteca deverá ser iniciada.
 
 ### Execução via Linha de Comando (com Maven)
