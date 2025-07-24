@@ -47,7 +47,7 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca desktop comp
 | Implemtação das  classes usuario, emprestimo, editora                                                                                                  | 18/07       | 20/07    | Stepahny    | Concluida | 
 | Atualização da aplicação desktop                                                                                                                        | 18/07       | 20/07    | Stepahny    | Concluida | 
 | Persistência de Dados: Todos os dados são armazenados em um arquivo SQLite (livraria.sqlite), garantindo que as informações persistam entre as sessões. | 18/07       | 20/07    | Stepahny    | Concluida |        
-| Atualização do Projeto usando JPA                                                                                                                       | 21/07       | 23/07    | Stepahny    | Em adamento |
+| Atualização do Projeto usando JPA                                                                                                                       | 21/07       | 23/07    | Stepahny    | Concluida |
 | Contrução de Teste Unitário                                                                                                                            | 23/07       | 25/07    | Thayliny    | Em andamento |     
 | Teste Unitario JUnit                                                                                                                                    | 23/07       | 25/07    | Thayliny    | Em andamento | 
     
@@ -97,7 +97,7 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca desktop comp
 ### Passo a passo de como executar os Projetos
 
   - [Sistema de Gerenciamento de Biblioteca API RestFull](https://github.com/SPD-BES-2025-3/grupo9/blob/main/api_rest_full_application/README.md)
-  - [Sistema de Gerenciamento de Biblioteca JavaFX](https://github.com/SPD-BES-2025-3/grupo9/blob/main/desktop-application/README.md)
+  - [Sistema de Gerenciamento de Biblioteca JavaFX](https://github.com/SPD-BES-2025-3/grupo9/blob/main/desktop_application/README.md)
 
 ### Documentação de Código
 

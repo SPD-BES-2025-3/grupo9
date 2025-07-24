@@ -6,9 +6,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
-
 @Entity
 @Table(name = "livro")
 @XmlRootElement(name = "livro")
@@ -41,17 +38,7 @@ public class Livro {
     @XmlElement
     private double preco;
 
-    @Temporal(TemporalType.DATE)
-    @XmlElement
-    private Date dataCadastro;
-
     public Livro() {}
-
-    public String printDataCadastro() {
-        if (dataCadastro == null) return "N/A";
-        SimpleDateFormat dateFor = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFor.format(dataCadastro);
-    }
 
     // --- Getters e Setters ---
     public int getId() { return this.id; }
@@ -66,8 +53,6 @@ public class Livro {
     public void setAnoPublicacao(int anoPublicacao) { this.anoPublicacao = anoPublicacao; }
     public double getPreco() { return this.preco; }
     public void setPreco(double preco) { this.preco = preco; }
-    public Date getDataCadastro() { return this.dataCadastro; }
-    public void setDataCadastro(Date dataCadastro) { this.dataCadastro = dataCadastro; }
 
     @Override
     public String toString() {
