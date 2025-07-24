@@ -1,25 +1,35 @@
 package br.com.grupo9.model;
 
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "usuario")
+@XmlRootElement(name = "usuario")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement
     private int id;
 
     @Column(nullable = false)
+    @XmlElement
     private String nome;
 
     @Column(nullable = false, unique = true)
+    @XmlElement
     private String email;
 
     @Column
     private String senha;
 
     @Column
+    @XmlElement
     private String telefone;
 
     public Usuario() {}

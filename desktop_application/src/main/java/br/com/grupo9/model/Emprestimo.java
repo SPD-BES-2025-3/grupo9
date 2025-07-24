@@ -1,33 +1,46 @@
 package br.com.grupo9.model;
 
 import jakarta.persistence.*;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
 @Table(name = "emprestimo")
+@XmlRootElement(name = "emprestimo")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Emprestimo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @XmlElement
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "livro_id", nullable = false)
+    @XmlElement
     private Livro livro;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
+    @XmlElement
     private Date dataEmprestimo;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
+    @XmlElement
     private Date dataDevolucaoPrevista;
 
     @Temporal(TemporalType.DATE)
+    @XmlElement
     private Date dataDevolucaoReal;
 
     public Emprestimo() {}
