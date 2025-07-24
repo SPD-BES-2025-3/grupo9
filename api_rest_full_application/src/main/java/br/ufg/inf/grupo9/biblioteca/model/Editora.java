@@ -1,8 +1,16 @@
 package br.ufg.inf.grupo9.biblioteca.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "editora")
 public class Editora {
 
@@ -14,45 +22,4 @@ public class Editora {
     private String endereco;
 
     private String telefone;
-
-    public Editora() {}
-
-    public Editora(String id, String nome, String endereco, String telefone) {
-        this.id = id;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.telefone = telefone;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 }
