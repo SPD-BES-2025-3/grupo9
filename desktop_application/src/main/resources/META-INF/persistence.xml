@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+    <!-- Define a Unidade de Persistência -->
+    <persistence-unit name="livraria-pu" transaction-type="RESOURCE_LOCAL">
+        <!-- Define a implementação JPA a ser utilizada (Hibernate) -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Lista todas as classes de entidade que serão gerenciadas pelo JPA -->
+        <class>br.com.grupo9.model.Autor</class>
+        <class>br.com.grupo9.model.Editora</class>
+        <class>br.com.grupo9.model.Usuario</class>
+        <class>br.com.grupo9.model.Livro</class>
+        <class>br.com.grupo9.model.Emprestimo</class>
+
+        <properties>
+            <!-- Configurações do Driver e Conexão com o Banco de Dados SQLite -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlite:livraria.sqlite"/>
+            <!-- Usuário e senha não são necessários para o SQLite -->
+            <property name="jakarta.persistence.jdbc.user" value=""/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+
+            <!-- Configurações específicas do Hibernate -->
+            <!-- Dialeto do Hibernate para SQLite -->
+            <property name="hibernate.dialect" value="org.hibernate.community.dialect.SQLiteDialect"/>
+
+            <!-- Ação a ser executada no schema do banco: 'update' tenta atualizar o schema existente -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Mostra o SQL gerado no console (útil para debug) -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
