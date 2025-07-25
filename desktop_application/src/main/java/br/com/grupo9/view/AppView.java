@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import br.com.grupo9.model.RedisUtil;
 
 import java.net.URL;
 
@@ -68,6 +69,7 @@ public class AppView extends Application {
     public void stop() {
         System.out.println("Encerrando a aplicação...");
         JPAUtil.shutdown();
+        RedisUtil.shutdown();
         System.out.println("Recursos liberados. Aplicação encerrada.");
     }
 
