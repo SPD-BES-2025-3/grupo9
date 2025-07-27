@@ -25,6 +25,32 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
+		<!-- JAXB (para XML) -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+
+		<!-- Gson (para JSON) -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+
+		<!-- JPA (Hibernate) -->
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.1.7.Final</version>
+		</dependency>
+
 		<!-- Conexão com MongoDB (para o BD2 - ODM) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
