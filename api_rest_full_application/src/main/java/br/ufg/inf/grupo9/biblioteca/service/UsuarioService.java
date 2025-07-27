@@ -19,6 +19,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioAdapter usuarioAdapter;
+    private final RedisPublisher redisPublisher;
 
     /**
      * Obtém todas os usuarios
@@ -82,6 +83,7 @@ public class UsuarioService {
     public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuarioRequestDTO) {
         final var usuario = this.usuarioAdapter.toUsuario(usuarioRequestDTO);
         final var usuarioSalva = this.usuarioRepository.save(usuario);
+        redisPublisher.publish(RedisPublisher.OperationType.CREATE, usuarioSalvo);
 
         return this.usuarioAdapter.toUsuarioDTO(usuarioSalva);
     }
@@ -102,6 +104,7 @@ public class UsuarioService {
         usuarioAtualizada.setId(usuarioExistente.getId());
 
         final var editoraSalva = this.usuarioRepository.save(usuarioAtualizada);
+        redisPublisher.publish(RedisPublisher.OperationType.UPDATE, usuarioSalvo);
         return this.usuarioAdapter.toUsuarioDTO(editoraSalva);
     }
 
@@ -117,5 +120,6 @@ public class UsuarioService {
                         HttpStatus.NOT_FOUND, "Usuario não encontrado"));
 
         this.usuarioRepository.delete(usuario);
+        redisPublisher.publish(RedisPublisher.OperationType.DELETE, usuario);
     }
 }

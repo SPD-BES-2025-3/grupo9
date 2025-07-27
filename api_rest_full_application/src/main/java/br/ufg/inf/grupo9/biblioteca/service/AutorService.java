@@ -18,6 +18,7 @@ public class AutorService {
 
     private final AutorRepository autorRepository;
     private final AutorAdapter autorAdapter;
+    private final RedisPublisher redisPublisher;
 
     /**
      * Obtém todos os autores.
@@ -74,6 +75,7 @@ public class AutorService {
     public AutorResponseDTO create(AutorRequestDTO autorRequestDTO) {
         final var autor = this.autorAdapter.toAutor(autorRequestDTO);
         final var autorSalvo = this.autorRepository.save(autor);
+        redisPublisher.publish(RedisPublisher.OperationType.CREATE, autorSalvo);
 
         return this.autorAdapter.toAutorDTO(autorSalvo);
     }
@@ -93,6 +95,7 @@ public class AutorService {
         autorAtualizado.setId(autorExistente.getId());
 
         final var autorSalvo = this.autorRepository.save(autorAtualizado);
+        redisPublisher.publish(RedisPublisher.OperationType.UPDATE, autorSalvo);
 
         return this.autorAdapter.toAutorDTO(autorSalvo);
     }
@@ -108,5 +111,7 @@ public class AutorService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         this.autorRepository.delete(autor);
+
+        redisPublisher.publish(RedisPublisher.OperationType.DELETE, autor);
     }
 }

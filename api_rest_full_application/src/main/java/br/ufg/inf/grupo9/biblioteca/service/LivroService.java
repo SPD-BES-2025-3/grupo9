@@ -25,6 +25,7 @@ public class LivroService {
     private final LivroAdapter livroAdapter;
     private final EditoraRepository editoraRepository;
     private final AutorRepository autorRepository;
+    private final RedisPublisher redisPublisher;
 
     /**
      * Obtém todos os livros.
@@ -87,6 +88,7 @@ public class LivroService {
 
         Livro livro = livroAdapter.toLivro(livroRequestDTO, autor, editora);
         Livro livroSalvo = livroRepository.save(livro);
+        redisPublisher.publish(RedisPublisher.OperationType.CREATE, livroSalvo);
 
         return livroAdapter.toLivroDTO(livroSalvo);
     }
@@ -107,6 +109,7 @@ public class LivroService {
         Livro livroAtualizado =  livroAdapter.toLivro(dto, autor, editora);
         livroAtualizado.setId(livroFound.getId());
         Livro livroSalvo = livroRepository.save(livroAtualizado);
+        redisPublisher.publish(RedisPublisher.OperationType.UPDATE, livroSalvo);
 
         return livroAdapter.toLivroDTO(livroSalvo);
     }
@@ -123,5 +126,6 @@ public class LivroService {
                         HttpStatus.NOT_FOUND, "Livro não encontrado"));
 
         this.livroRepository.delete(livro);
+        redisPublisher.publish(RedisPublisher.OperationType.DELETE, livro);
     }
 }

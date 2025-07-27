@@ -26,6 +26,7 @@ public class EmprestimoService {
     private final LivroRepository livroRepository;
     private final UsuarioRepository usuarioRepository;
     private final EmprestimoAdapter emprestimoAdapter;
+    private final RedisPublisher redisPublisher;
 
     /**
      * Obtém todos os emprestimo.
@@ -102,6 +103,7 @@ public class EmprestimoService {
 
         Emprestimo emprestimo = emprestimoAdapter.toEmprestimo(emprestimoRequestDTO, usuario, livro);
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+        redisPublisher.publish(RedisPublisher.OperationType.CREATE, emprestimoSalvo);
 
         return emprestimoAdapter.toEmprestimoDTO(emprestimoSalvo);
     }
@@ -129,6 +131,7 @@ public class EmprestimoService {
         Emprestimo emprestimoAtualizado = emprestimoAdapter.toEmprestimo(emprestimoRequestDTO, usuario, livro);
         emprestimoAtualizado.setId(emprestimoFound.getId());
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimoAtualizado);
+        redisPublisher.publish(RedisPublisher.OperationType.UPDATE, emprestimoSalvo);
 
         return emprestimoAdapter.toEmprestimoDTO(emprestimoSalvo);
     }
@@ -145,5 +148,6 @@ public class EmprestimoService {
                         HttpStatus.NOT_FOUND, "Emprestimo não encontrado"));
 
         this.emprestimoRepository.delete(emprestimo);
+        redisPublisher.publish(RedisPublisher.OperationType.DELETE, emprestimo);
     }
 }
