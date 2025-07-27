@@ -32,6 +32,7 @@ public class RedisConfig {
 
     /**
      * Cria e configura o container que gerencia o processo de escuta (listening).
+     *
      * @param connectionFactory A fábrica de conexões com o Redis, gerenciada pelo Spring.
      * @return O container configurado para ouvir o canal 'crud-channel'.
      */

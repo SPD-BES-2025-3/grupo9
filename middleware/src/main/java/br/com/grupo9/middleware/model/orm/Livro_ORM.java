@@ -1,29 +1,20 @@
 package br.com.grupo9.middleware.model.orm;
 
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "livro")
-@XmlRootElement(name = "livro")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Livro_ORM {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @XmlElement
     private int id;
 
     @Column(nullable = false)
-    @XmlElement
     private String titulo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "autor_id", nullable = false)
-    @XmlElement
     private Autor_ORM autor;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -31,11 +22,9 @@ public class Livro_ORM {
     private Editora_ORM editora;
 
     @Column
-    @XmlElement
     private int anoPublicacao;
 
     @Column
-    @XmlElement
     private double preco;
 
     public Livro_ORM() {}
