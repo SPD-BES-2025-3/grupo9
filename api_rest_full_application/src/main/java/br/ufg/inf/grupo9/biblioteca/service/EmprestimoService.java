@@ -6,6 +6,7 @@ import br.ufg.inf.grupo9.biblioteca.dto.emprestimo.EmprestimoResponseDTO;
 import br.ufg.inf.grupo9.biblioteca.model.Emprestimo;
 import br.ufg.inf.grupo9.biblioteca.model.Livro;
 import br.ufg.inf.grupo9.biblioteca.model.Usuario;
+import br.ufg.inf.grupo9.biblioteca.pubsub.RedisPublisher;
 import br.ufg.inf.grupo9.biblioteca.repository.EmprestimoRepository;
 import br.ufg.inf.grupo9.biblioteca.repository.LivroRepository;
 import br.ufg.inf.grupo9.biblioteca.repository.UsuarioRepository;

@@ -6,6 +6,7 @@ import br.ufg.inf.grupo9.biblioteca.dto.livro.LivroResponseDTO;
 import br.ufg.inf.grupo9.biblioteca.model.Autor;
 import br.ufg.inf.grupo9.biblioteca.model.Editora;
 import br.ufg.inf.grupo9.biblioteca.model.Livro;
+import br.ufg.inf.grupo9.biblioteca.pubsub.RedisPublisher;
 import br.ufg.inf.grupo9.biblioteca.repository.AutorRepository;
 import br.ufg.inf.grupo9.biblioteca.repository.EditoraRepository;
 import br.ufg.inf.grupo9.biblioteca.repository.LivroRepository;

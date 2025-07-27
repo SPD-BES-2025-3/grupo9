@@ -3,6 +3,7 @@ package br.ufg.inf.grupo9.biblioteca.service;
 import br.ufg.inf.grupo9.biblioteca.adapter.EditoraAdapter;
 import br.ufg.inf.grupo9.biblioteca.dto.editora.EditoraRequestDTO;
 import br.ufg.inf.grupo9.biblioteca.dto.editora.EditoraResponseDTO;
+import br.ufg.inf.grupo9.biblioteca.pubsub.RedisPublisher;
 import br.ufg.inf.grupo9.biblioteca.repository.EditoraRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
