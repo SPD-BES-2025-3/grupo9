@@ -28,8 +28,7 @@
             <!-- Dialeto do Hibernate para SQLite -->
             <property name="hibernate.dialect" value="org.hibernate.community.dialect.SQLiteDialect"/>
 
-            <!-- Ação a ser executada no schema do banco: 'update' tenta atualizar o schema existente -->
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
 
             <!-- Mostra o SQL gerado no console (útil para debug) -->
             <property name="hibernate.show_sql" value="true"/>

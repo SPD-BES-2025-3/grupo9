@@ -47,7 +47,7 @@
 		<!-- JPA (Hibernate) -->
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-core</artifactId>
+			<artifactId>hibernate-community-dialects</artifactId>
 			<version>6.1.7.Final</version>
 		</dependency>
 
