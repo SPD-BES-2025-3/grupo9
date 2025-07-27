@@ -24,11 +24,11 @@ public class Livro_ORM {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "autor_id", nullable = false)
     @XmlElement
-    private Autor_ORM autorORM;
+    private Autor_ORM autor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "editora_id", nullable = false)
-    private Editora_ORM editoraORM;
+    private Editora_ORM editora;
 
     @Column
     @XmlElement
@@ -45,10 +45,10 @@ public class Livro_ORM {
     public void setId(int id) { this.id = id; }
     public String getTitulo() { return this.titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
-    public Autor_ORM getAutor() { return this.autorORM; }
-    public void setAutor(Autor_ORM autorORM) { this.autorORM = autorORM; }
-    public Editora_ORM getEditora() { return editoraORM; }
-    public void setEditora(Editora_ORM editoraORM) { this.editoraORM = editoraORM; }
+    public Autor_ORM getAutor() { return this.autor; }
+    public void setAutor(Autor_ORM autor) { this.autor = autor; }
+    public Editora_ORM getEditora() { return editora; }
+    public void setEditora(Editora_ORM editora) { this.editora = editora; }
     public int getAnoPublicacao() { return this.anoPublicacao; }
     public void setAnoPublicacao(int anoPublicacao) { this.anoPublicacao = anoPublicacao; }
     public double getPreco() { return this.preco; }

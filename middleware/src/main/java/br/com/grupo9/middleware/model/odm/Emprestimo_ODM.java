@@ -21,10 +21,10 @@ public class Emprestimo_ODM {
     private String id;
 
     @DBRef
-    private Usuario_ODM usuarioODM;
+    private Usuario_ODM usuario;
 
     @DBRef
-    private Livro_ODM livroODM;
+    private Livro_ODM livro;
 
     private Date dataEmprestimo;
 

@@ -22,12 +22,12 @@ public class Emprestimo_ORM {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id", nullable = false)
     @XmlElement
-    private Usuario_ORM usuarioORM;
+    private Usuario_ORM usuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "livro_id", nullable = false)
     @XmlElement
-    private Livro_ORM livroORM;
+    private Livro_ORM livro;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -48,10 +48,10 @@ public class Emprestimo_ORM {
     // Getters e Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public Usuario_ORM getUsuario() { return usuarioORM; }
-    public void setUsuario(Usuario_ORM usuarioORM) { this.usuarioORM = usuarioORM; }
-    public Livro_ORM getLivro() { return livroORM; }
-    public void setLivro(Livro_ORM livroORM) { this.livroORM = livroORM; }
+    public Usuario_ORM getUsuario() { return usuario; }
+    public void setUsuario(Usuario_ORM usuario) { this.usuario = usuario; }
+    public Livro_ORM getLivro() { return livro; }
+    public void setLivro(Livro_ORM livro) { this.livro = livro; }
     public Date getDataEmprestimo() { return dataEmprestimo; }
     public void setDataEmprestimo(Date dataEmprestimo) { this.dataEmprestimo = dataEmprestimo; }
     public Date getDataDevolucaoPrevista() { return dataDevolucaoPrevista; }

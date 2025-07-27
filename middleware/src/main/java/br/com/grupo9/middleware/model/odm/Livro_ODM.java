@@ -27,8 +27,8 @@ public class Livro_ODM {
     private double preco;
 
     @DBRef
-    private Editora_ODM editoraODM;
+    private Editora_ODM editora;
 
     @DBRef
-    private Autor_ODM autorODM;
+    private Autor_ODM autor;
 }

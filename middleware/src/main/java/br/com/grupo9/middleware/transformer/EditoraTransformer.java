@@ -7,20 +7,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class EditoraTransformer {
 
-    /**
-     * Converte um objeto Editora do modelo relacional (ORM) para o modelo de documento (ODM).
-     * @param orm O objeto Editora vindo do banco de dados SQLite.
-     * @return Um novo objeto Editora_ODM pronto para ser salvo no MongoDB.
-     */
     public Editora_ODM toOdm(Editora_ORM orm) {
-        if (orm == null) {
-            return null;
-        }
-
+        if (orm == null) return null;
         Editora_ODM odm = new Editora_ODM();
         odm.setNome(orm.getNome());
         odm.setEndereco(orm.getEndereco());
         odm.setTelefone(orm.getTelefone());
         return odm;
+    }
+
+    public Editora_ORM toOrm(Editora_ODM odm) {
+        if (odm == null) return null;
+        Editora_ORM orm = new Editora_ORM();
+        orm.setNome(odm.getNome());
+        orm.setEndereco(odm.getEndereco());
+        orm.setTelefone(odm.getTelefone());
+        return orm;
     }
 }

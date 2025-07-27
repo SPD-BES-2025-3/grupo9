@@ -7,21 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class UsuarioTransformer {
 
-    /**
-     * Converte um objeto Usuario do modelo relacional (ORM) para o modelo de documento (ODM).
-     * @param orm O objeto Usuario vindo do banco de dados SQLite.
-     * @return Um novo objeto Usuario_ODM pronto para ser salvo no MongoDB.
-     */
     public Usuario_ODM toOdm(Usuario_ORM orm) {
-        if (orm == null) {
-            return null;
-        }
-
+        if (orm == null) return null;
         Usuario_ODM odm = new Usuario_ODM();
         odm.setNome(orm.getNome());
         odm.setEmail(orm.getEmail());
         odm.setSenha(orm.getSenha());
         odm.setTelefone(orm.getTelefone());
         return odm;
+    }
+
+    public Usuario_ORM toOrm(Usuario_ODM odm) {
+        if (odm == null) return null;
+        Usuario_ORM orm = new Usuario_ORM();
+        orm.setNome(odm.getNome());
+        orm.setEmail(odm.getEmail());
+        orm.setSenha(odm.getSenha());
+        orm.setTelefone(odm.getTelefone());
+        return orm;
     }
 }

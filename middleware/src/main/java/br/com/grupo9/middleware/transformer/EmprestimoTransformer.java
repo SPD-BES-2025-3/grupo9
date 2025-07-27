@@ -1,11 +1,11 @@
 package br.com.grupo9.middleware.transformer;
 
 import br.com.grupo9.middleware.model.odm.Emprestimo_ODM;
-import br.com.grupo9.middleware.model.odm.Livro_ODM;
-import br.com.grupo9.middleware.model.odm.Usuario_ODM;
 import br.com.grupo9.middleware.model.orm.Emprestimo_ORM;
 import br.com.grupo9.middleware.repository.odm.LivroOdmRepository;
 import br.com.grupo9.middleware.repository.odm.UsuarioOdmRepository;
+import br.com.grupo9.middleware.repository.orm.LivroOrmRepository;
+import br.com.grupo9.middleware.repository.orm.UsuarioOrmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,38 +15,40 @@ public class EmprestimoTransformer {
 
     private final UsuarioOdmRepository usuarioOdmRepository;
     private final LivroOdmRepository livroOdmRepository;
+    private final UsuarioOrmRepository usuarioOrmRepository;
+    private final LivroOrmRepository livroOrmRepository;
 
-    /**
-     * Converte um Emprestimo_ORM para um Emprestimo_ODM, resolvendo as dependências de Usuario e Livro.
-     * @param orm O objeto Emprestimo vindo do SQLite.
-     * @return Um novo Emprestimo_ODM com as DBRefs preenchidas.
-     * @throws IllegalStateException se uma dependência (Usuario ou Livro) não for encontrada no MongoDB.
-     */
     public Emprestimo_ODM toOdm(Emprestimo_ORM orm) {
-        if (orm == null) {
-            return null;
-        }
+        if (orm == null) return null;
 
-        // 1. Busca o Usuário correspondente no MongoDB usando o email como chave.
-        String emailUsuario = orm.getUsuario().getEmail();
-        Usuario_ODM usuarioOdm = usuarioOdmRepository.findByEmail(emailUsuario).stream().findFirst()
-                .orElseThrow(() -> new IllegalStateException("Dependência não sincronizada: Usuário com email '" + emailUsuario + "' não encontrado no MongoDB."));
+        var usuarioOdm = usuarioOdmRepository.findByEmail(orm.getUsuario().getEmail()).stream().findFirst()
+                .orElseThrow(() -> new IllegalStateException("Dependência ORM->ODM não encontrada: Usuário '" + orm.getUsuario().getEmail() + "'"));
+        var livroOdm = livroOdmRepository.findByTitulo(orm.getLivro().getTitulo()).stream().findFirst()
+                .orElseThrow(() -> new IllegalStateException("Dependência ORM->ODM não encontrada: Livro '" + orm.getLivro().getTitulo() + "'"));
 
-        // 2. Busca o Livro correspondente no MongoDB usando o título como chave.
-        String tituloLivro = orm.getLivro().getTitulo();
-        Livro_ODM livroOdm = livroOdmRepository.findByTitulo(tituloLivro).stream().findFirst()
-                .orElseThrow(() -> new IllegalStateException("Dependência não sincronizada: Livro com título '" + tituloLivro + "' não encontrado no MongoDB."));
-
-        // 3. Constrói o Emprestimo_ODM
         Emprestimo_ODM odm = new Emprestimo_ODM();
         odm.setDataEmprestimo(orm.getDataEmprestimo());
         odm.setDataDevolucaoPrevista(orm.getDataDevolucaoPrevista());
         odm.setDataDevolucaoRealizada(orm.getDataDevolucaoReal());
-
-        // 4. Atribui as referências encontradas
         odm.setUsuario(usuarioOdm);
         odm.setLivro(livroOdm);
-
         return odm;
+    }
+    
+    public Emprestimo_ORM toOrm(Emprestimo_ODM odm) {
+        if (odm == null) return null;
+
+        var usuarioOrm = usuarioOrmRepository.findFirstByEmail(odm.getUsuario().getEmail())
+                .orElseThrow(() -> new IllegalStateException("Dependência ODM->ORM não encontrada: Usuário '" + odm.getUsuario().getEmail() + "'"));
+        var livroOrm = livroOrmRepository.findFirstByTitulo(odm.getLivro().getTitulo())
+                .orElseThrow(() -> new IllegalStateException("Dependência ODM->ORM não encontrada: Livro '" + odm.getLivro().getTitulo() + "'"));
+
+        Emprestimo_ORM orm = new Emprestimo_ORM();
+        orm.setDataEmprestimo(odm.getDataEmprestimo());
+        orm.setDataDevolucaoPrevista(odm.getDataDevolucaoPrevista());
+        orm.setDataDevolucaoReal(odm.getDataDevolucaoRealizada());
+        orm.setUsuario(usuarioOrm);
+        orm.setLivro(livroOrm);
+        return orm;
     }
 }
