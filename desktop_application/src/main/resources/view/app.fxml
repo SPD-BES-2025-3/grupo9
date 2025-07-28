@@ -57,7 +57,7 @@
                                                 <Button fx:id="adicionarEmprestimoButton" onAction="#handleAdicionarEmprestimo" text="Novo Empréstimo" prefWidth="130" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
                                                 <Button fx:id="salvarEmprestimoButton" onAction="#handleSalvarEmprestimo" text="Salvar" prefWidth="100" style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
                                                 <Button fx:id="cancelarEmprestimoButton" onAction="#handleCancelarEmprestimo" text="Cancelar" prefWidth="100" style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
-                                                <Button fx:id="registrarDevolucaoButton" onAction="#handleRegistrarDevolucao" text="Registrar Devolução" prefWidth="150" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                                                <Button fx:id="registrarDevolucaoButton" text="Registrar Devolução" prefWidth="150" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
                                                 <Button fx:id="deletarEmprestimoButton" onAction="#handleDeletarEmprestimo" text="Excluir Registro" prefWidth="120" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
                                             </HBox>
                                         </children>

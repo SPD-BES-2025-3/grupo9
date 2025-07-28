@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Banco de Dados MongoDB para a aplicação ODM
   mongodb:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb
@@ -9,8 +8,9 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - app-network
 
-  # Barramento de Eventos Redis
   redis:
     image: redis:7.2-alpine
     container_name: redis
@@ -18,8 +18,9 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - app-network
 
-  # Interface Gráfica para o Redis
   redis-ui:
     image: redislabs/redisinsight:latest
     container_name: redis-ui
@@ -27,8 +28,15 @@ services:
       - "8001:8001"
     volumes:
       - redisinsight_data:/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   mongodb_data:
   redis_data:
   redisinsight_data:
+
