@@ -65,11 +65,11 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca desktop comp
 | Criação do arquivo application.properties com configurações do MongoDB | 21/07 | 25/07 | Vitoria | Concluída |
 | Início da implementação do CRUD de entidades principais (Livro, Autor) | 21/07 | 25/07 | Vitoria | Concluída |
 | Criação de repositórios com Spring Data MongoDB | 21/07 | 25/07 | Vitoria | Concluída |
-| Aplicação do padrão Builder com Lombok em DTOs | 21/07 | 25/07 | Vitoria | Em andamento |
-| Criação de modelos iniciais com base no diagrama do projeto | 21/07 | 25/07 | Vitoria | Em andamento |
-| Finalizar os métodos CRUD no controller e service | 22/07 | 26/07 | Vitoria | A Fazer |
-| Criar os testes unitários para os repositórios | 22/07 | 28/07 | Vitoria | A Fazer |
-| Adicionar validações nas entidades e DTOs | 22/07 | 28/07 | Vitoria | A Fazer |
+| Aplicação do padrão Builder com Lombok em DTOs | 21/07 | 25/07 | Vitoria | Concluído |
+| Criação de modelos iniciais com base no diagrama do projeto | 21/07 | 25/07 | Vitoria | Concluído |
+| Finalizar os métodos CRUD no controller e service | 22/07 | 26/07 | Vitoria | Concluído |
+| Criar os testes unitários para os repositórios | 22/07 | 28/07 | Thayline | Concluído |
+| Adicionar validações nas entidades e DTOs | 22/07 | 28/07 | Vitoria | Concluído |
 | Iniciar a documentação da API com Swagger/OpenAPI | 22/07 | 29/07 | Vitoria | A Fazer |
 
 ## Modelagem Inicial
