@@ -128,14 +128,14 @@ class AutorServiceTest {
 
     @Test
     void update_quandoExistir_deveAtualizarEConverter() {
-        // dado que existe
+
         when(autorRepository.findById("123")).thenReturn(Optional.of(autorEntity));
-        // adapter converte request em nova entidade sem id
+
         Autor entidadeAtualizada = new Autor();
         entidadeAtualizada.setNome("João");
         entidadeAtualizada.setNacionalidade("Brasileiro");
         when(autorAdapter.toAutor(requestDTO)).thenReturn(entidadeAtualizada);
-        // repositorio salva e retorna entidade com id
+
         Autor salvo = new Autor();
         salvo.setId("123");
         salvo.setNome("João");
@@ -146,7 +146,7 @@ class AutorServiceTest {
         AutorResponseDTO result = autorService.update(requestDTO, "123");
 
         assertThat(result).isEqualTo(responseDTO);
-        // confirma que o id antigo foi preservado
+
         assertThat(entidadeAtualizada.getId()).isEqualTo("123");
         verify(autorRepository).findById("123");
         verify(autorRepository).save(entidadeAtualizada);

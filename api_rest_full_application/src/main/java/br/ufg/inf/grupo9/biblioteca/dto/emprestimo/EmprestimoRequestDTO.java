@@ -3,6 +3,7 @@ package br.ufg.inf.grupo9.biblioteca.dto.emprestimo;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -19,16 +20,16 @@ public class EmprestimoRequestDTO {
 
     private String idLivro;
 
-    private Date dataEmprestimo;
+    private LocalDate dataEmprestimo;
 
-    private Date dataDevolucaoPrevista;
+    private LocalDate dataDevolucaoPrevista;
 
-    private Date dataDevolucaoRealizada;
+    private LocalDate dataDevolucaoRealizada;
 
     public EmprestimoRequestDTO() {
     }
 
-    public EmprestimoRequestDTO(String idUsuario, String idLivro, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucaoRealizada) {
+    public EmprestimoRequestDTO(String idUsuario, String idLivro, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevista, LocalDate dataDevolucaoRealizada) {
         this.idUsuario = idUsuario;
         this.idLivro = idLivro;
         this.dataEmprestimo = dataEmprestimo;
@@ -52,27 +53,27 @@ public class EmprestimoRequestDTO {
         this.idLivro = idLivro;
     }
 
-    public Date getDataEmprestimo() {
+    public LocalDate getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(Date dataEmprestimo) {
+    public void setDataEmprestimo(LocalDate dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public Date getDataDevolucaoPrevista() {
+    public LocalDate getDataDevolucaoPrevista() {
         return dataDevolucaoPrevista;
     }
 
-    public void setDataDevolucaoPrevista(Date dataDevolucaoPrevista) {
+    public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
-    public Date getDataDevolucaoRealizada() {
+    public LocalDate getDataDevolucaoRealizada() {
         return dataDevolucaoRealizada;
     }
 
-    public void setDataDevolucaoRealizada(Date dataDevolucaoRealizada) {
+    public void setDataDevolucaoRealizada(LocalDate dataDevolucaoRealizada) {
         this.dataDevolucaoRealizada = dataDevolucaoRealizada;
     }
 }

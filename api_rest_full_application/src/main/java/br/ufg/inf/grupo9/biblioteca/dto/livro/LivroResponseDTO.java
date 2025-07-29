@@ -32,20 +32,12 @@ public class LivroResponseDTO {
 
     private String idAutor;
 
-    public LivroResponseDTO(String id, String titulo, String isbn, int anoPublicacao, double preco, String idEditora, String idAutor) {
-        this.id = id;
-        this.titulo = titulo;
-        this.isbn = isbn;
-        this.anoPublicacao = anoPublicacao;
-        this.preco = preco;
-        this.idEditora = idEditora;
-        this.idAutor = idAutor;
-    }
 
-    public LivroResponseDTO(String id, String titulo, String isbn, int anoPublicacao) {
+    public LivroResponseDTO(String id, String titulo, String idAutor,  String idEditora, int anoPublicacao) {
         this.id = id;
         this.titulo = titulo;
-        this.isbn = isbn;
+        this.idAutor = idAutor;
+        this.idEditora = idEditora;
         this.anoPublicacao = anoPublicacao;
     }
 

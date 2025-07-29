@@ -18,6 +18,16 @@ public class AutorResponseDTO {
     private String nome;
     private String nacionalidade;
 
+
+    public AutorResponseDTO(String id, String nome, String nacionalidade) {
+        this.id = id;
+        this.nome = nome;
+        this.nacionalidade = nacionalidade;
+    }
+
+    public AutorResponseDTO() {
+    }
+
     public String getId() {
         return id;
     }
@@ -42,9 +52,4 @@ public class AutorResponseDTO {
         this.nacionalidade = nacionalidade;
     }
 
-    public AutorResponseDTO(String id, String nome, String nacionalidade) {
-        this.id = id;
-        this.nome = nome;
-        this.nacionalidade = nacionalidade;
-    }
 }

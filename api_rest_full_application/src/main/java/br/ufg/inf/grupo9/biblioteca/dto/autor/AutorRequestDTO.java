@@ -21,6 +21,8 @@ public class AutorRequestDTO {
         this.nacionalidade = nacionalidade;
     }
 
+
+
     public String getNome() {
         return nome;
     }

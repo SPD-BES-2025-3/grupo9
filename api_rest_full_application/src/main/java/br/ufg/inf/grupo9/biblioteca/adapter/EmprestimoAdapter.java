@@ -6,6 +6,7 @@ import br.ufg.inf.grupo9.biblioteca.model.Emprestimo;
 import br.ufg.inf.grupo9.biblioteca.model.Livro;
 import br.ufg.inf.grupo9.biblioteca.model.Usuario;
 import org.springframework.stereotype.Component;
+import java.time.LocalDate;
 
 /**
  * A classe EmprestimoAdapter é responsável por realizar a conversão entre diferentes representações
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Component;
  * - EmprestimoRequestDTO -> Emprestimo (para criação/atualização de dados)
  * - Emprestimo -> EmprestimoResponseDTO (para exibição de dados)
  */
+
+
+
 @Component
 public class EmprestimoAdapter {
 
