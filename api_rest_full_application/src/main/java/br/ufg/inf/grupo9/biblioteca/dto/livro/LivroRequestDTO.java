@@ -28,4 +28,13 @@ public class LivroRequestDTO {
     private String idEditora;
 
     private String idAutor;
+
+
+    public LivroRequestDTO(String titulo, String idAutor, String idEditora, int anoPublicacao) {
+        this.titulo = titulo;
+        this.idAutor = idAutor;
+        this.idEditora = idEditora;
+        this.anoPublicacao = anoPublicacao;
+    }
+
 }

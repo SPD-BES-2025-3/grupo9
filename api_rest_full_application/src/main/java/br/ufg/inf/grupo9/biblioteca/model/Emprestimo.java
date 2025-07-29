@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -26,9 +27,9 @@ public class Emprestimo {
     @DBRef
     private Livro livro;
 
-    private Date dataEmprestimo;
+    private LocalDate dataEmprestimo;
 
-    private Date dataDevolucaoPrevista;
+    private LocalDate dataDevolucaoPrevista;
 
-    private Date dataDevolucaoRealizada;
+    private LocalDate dataDevolucaoRealizada;
 }

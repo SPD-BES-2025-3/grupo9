@@ -3,6 +3,7 @@ package br.ufg.inf.grupo9.biblioteca.dto.emprestimo;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -19,9 +20,60 @@ public class EmprestimoRequestDTO {
 
     private String idLivro;
 
-    private Date dataEmprestimo;
+    private LocalDate dataEmprestimo;
 
-    private Date dataDevolucaoPrevista;
+    private LocalDate dataDevolucaoPrevista;
 
-    private Date dataDevolucaoRealizada;
+    private LocalDate dataDevolucaoRealizada;
+
+    public EmprestimoRequestDTO() {
+    }
+
+    public EmprestimoRequestDTO(String idUsuario, String idLivro, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevista, LocalDate dataDevolucaoRealizada) {
+        this.idUsuario = idUsuario;
+        this.idLivro = idLivro;
+        this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+        this.dataDevolucaoRealizada = dataDevolucaoRealizada;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getIdLivro() {
+        return idLivro;
+    }
+
+    public void setIdLivro(String idLivro) {
+        this.idLivro = idLivro;
+    }
+
+    public LocalDate getDataEmprestimo() {
+        return dataEmprestimo;
+    }
+
+    public void setDataEmprestimo(LocalDate dataEmprestimo) {
+        this.dataEmprestimo = dataEmprestimo;
+    }
+
+    public LocalDate getDataDevolucaoPrevista() {
+        return dataDevolucaoPrevista;
+    }
+
+    public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+    }
+
+    public LocalDate getDataDevolucaoRealizada() {
+        return dataDevolucaoRealizada;
+    }
+
+    public void setDataDevolucaoRealizada(LocalDate dataDevolucaoRealizada) {
+        this.dataDevolucaoRealizada = dataDevolucaoRealizada;
+    }
 }

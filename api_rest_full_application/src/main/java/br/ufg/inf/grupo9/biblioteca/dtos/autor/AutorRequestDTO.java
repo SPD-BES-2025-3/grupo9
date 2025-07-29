@@ -1,4 +1,4 @@
-package br.ufg.inf.grupo9.biblioteca.dto.autor;
+package br.ufg.inf.grupo9.biblioteca.dtos.autor;
 
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +21,6 @@ public class AutorRequestDTO {
         this.nacionalidade = nacionalidade;
     }
 
-
-
     public String getNome() {
         return nome;
     }
@@ -38,10 +36,4 @@ public class AutorRequestDTO {
     public void setNacionalidade(String nacionalidade) {
         this.nacionalidade = nacionalidade;
     }
-
-    public AutorRequestDTO() {
-        // Construtor vazio necessário para frameworks e testes
-    }
-
-
 }

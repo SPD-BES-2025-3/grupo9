@@ -31,4 +31,69 @@ public class LivroResponseDTO {
     private String idEditora;
 
     private String idAutor;
+
+
+    public LivroResponseDTO(String id, String titulo, String idAutor,  String idEditora, int anoPublicacao) {
+        this.id = id;
+        this.titulo = titulo;
+        this.idAutor = idAutor;
+        this.idEditora = idEditora;
+        this.anoPublicacao = anoPublicacao;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public int getAnoPublicacao() {
+        return anoPublicacao;
+    }
+
+    public void setAnoPublicacao(int anoPublicacao) {
+        this.anoPublicacao = anoPublicacao;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public String getIdEditora() {
+        return idEditora;
+    }
+
+    public void setIdEditora(String idEditora) {
+        this.idEditora = idEditora;
+    }
+
+    public String getIdAutor() {
+        return idAutor;
+    }
+
+    public void setIdAutor(String idAutor) {
+        this.idAutor = idAutor;
+    }
 }
