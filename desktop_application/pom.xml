@@ -75,6 +75,58 @@
       <artifactId>lettuce-core</artifactId>
       <version>6.2.6.RELEASE</version>
     </dependency>
-  </dependencies>
+
+
+    <!-- Suas dependências existentes (JavaFX, Hibernate, etc.) -->
+
+    <!-- JUnit 5 (Jupiter) -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito: Para criar "dublês" (mocks) de objetos -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.12.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.12.0</version>
+      <scope>test</scope>
+    </dependency>
+
+      <!-- JavaFX base -->
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>17.0.10</version>
+      </dependency>
+
+      <!-- JavaFX controls (botões, campos, etc) -->
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>17.0.10</version>
+      </dependency>
+
+      <!-- JavaFX swing (necessário para JFXPanel) -->
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-swing</artifactId>
+        <version>17.0.10</version>
+      </dependency>
+    </dependencies>
 
 </project>
