@@ -1,14 +1,17 @@
 package br.com.grupo9.middleware.service;
 
+import br.com.grupo9.middleware.config.RedisConfig;
 import br.com.grupo9.middleware.model.odm.*;
 import br.com.grupo9.middleware.model.orm.*;
 import br.com.grupo9.middleware.repository.odm.*;
 import br.com.grupo9.middleware.repository.orm.*;
 import br.com.grupo9.middleware.transformer.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,21 +19,29 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SyncService {
 
-    private final Gson gson = new Gson();
+    // Configura o Gson para lidar com formatos de data específicos, se necessário.
+    private final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .create();
 
-    // Repositórios
+    // Injetado para poder republicar mensagens nas filas de retry/DLQ
+    private final StringRedisTemplate redisTemplate;
+
+    // Repositórios ODM (MongoDB)
     private final AutorOdmRepository autorOdmRepository;
     private final EditoraOdmRepository editoraOdmRepository;
     private final UsuarioOdmRepository usuarioOdmRepository;
     private final LivroOdmRepository livroOdmRepository;
     private final EmprestimoOdmRepository emprestimoOdmRepository;
+
+    // Repositórios ORM (SQLite)
     private final AutorOrmRepository autorOrmRepository;
     private final EditoraOrmRepository editoraOrmRepository;
     private final UsuarioOrmRepository usuarioOrmRepository;
     private final LivroOrmRepository livroOrmRepository;
     private final EmprestimoOrmRepository emprestimoOrmRepository;
 
-    // Transformadores
+    // Transformadores de dados
     private final AutorTransformer autorTransformer;
     private final EditoraTransformer editoraTransformer;
     private final UsuarioTransformer usuarioTransformer;
@@ -63,7 +74,7 @@ public class SyncService {
             log.info("ORM->ODM [{}]: Editora '{}' salva.", op, odm.getNome());
         }
     }
-    
+
     public void syncUsuarioFromOrm(String op, JsonObject payload) {
         Usuario_ORM orm = gson.fromJson(payload, Usuario_ORM.class);
         if ("DELETE".equals(op)) {
@@ -76,7 +87,7 @@ public class SyncService {
             log.info("ORM->ODM [{}]: Usuário '{}' salvo.", op, odm.getEmail());
         }
     }
-    
+
     public void syncLivroFromOrm(String op, JsonObject payload) {
         Livro_ORM orm = gson.fromJson(payload, Livro_ORM.class);
         if ("DELETE".equals(op)) {
@@ -89,8 +100,8 @@ public class SyncService {
                 livroOdmRepository.save(odm);
                 log.info("ORM->ODM [{}]: Livro '{}' salvo.", op, odm.getTitulo());
             } catch (IllegalStateException e) {
-                log.error("ORM->ODM Falha na sincronização do Livro: {}. Mensagem para retry.", e.getMessage());
-                // TODO: Enviar para a fila de retry
+                log.error("ORM->ODM Falha na sincronização do Livro: {}. Enviando para retry.", e.getMessage());
+                republishForRetry(payload);
             }
         }
     }
@@ -105,7 +116,8 @@ public class SyncService {
                 emprestimoOdmRepository.save(odm);
                 log.info("ORM->ODM [{}]: Empréstimo do livro '{}' salvo.", op, odm.getLivro().getTitulo());
             } catch (IllegalStateException e) {
-                log.error("ORM->ODM Falha na sincronização do Empréstimo: {}. Mensagem para retry.", e.getMessage());
+                log.error("ORM->ODM Falha na sincronização do Empréstimo: {}. Enviando para retry.", e.getMessage());
+                republishForRetry(payload);
             }
         }
     }
@@ -136,7 +148,7 @@ public class SyncService {
             log.info("ODM->ORM [{}]: Editora '{}' salva.", op, orm.getNome());
         }
     }
-    
+
     public void syncUsuarioFromOdm(String op, JsonObject payload) {
         Usuario_ODM odm = gson.fromJson(payload, Usuario_ODM.class);
         if ("DELETE".equals(op)) {
@@ -162,11 +174,12 @@ public class SyncService {
                 livroOrmRepository.save(orm);
                 log.info("ODM->ORM [{}]: Livro '{}' salvo.", op, orm.getTitulo());
             } catch (IllegalStateException e) {
-                log.error("ODM->ORM Falha na sincronização do Livro: {}. Mensagem para retry.", e.getMessage());
+                log.error("ODM->ORM Falha na sincronização do Livro: {}. Enviando para retry.", e.getMessage());
+                republishForRetry(payload);
             }
         }
     }
-    
+
     public void syncEmprestimoFromOdm(String op, JsonObject payload) {
         Emprestimo_ODM odm = gson.fromJson(payload, Emprestimo_ODM.class);
         if ("DELETE".equals(op)) {
@@ -174,12 +187,38 @@ public class SyncService {
         } else {
             try {
                 Emprestimo_ORM orm = emprestimoTransformer.toOrm(odm);
-                // Lógica de upsert para empréstimo é complexa. Assumindo criação.
                 emprestimoOrmRepository.save(orm);
                 log.info("ODM->ORM [{}]: Empréstimo do livro '{}' salvo.", op, orm.getLivro().getTitulo());
             } catch (IllegalStateException e) {
-                log.error("ODM->ORM Falha na sincronização do Empréstimo: {}. Mensagem para retry.", e.getMessage());
+                log.error("ODM->ORM Falha na sincronização do Empréstimo: {}. Enviando para retry.", e.getMessage());
+                republishForRetry(payload);
             }
+        }
+    }
+
+    /**
+     * Republica uma mensagem falha em um canal de retentativa ou DLQ.
+     * @param originalPayload O payload da mensagem que falhou.
+     */
+    private void republishForRetry(JsonObject originalPayload) {
+        try {
+            int retryCount = 0;
+            if (originalPayload.has("retryCount")) {
+                retryCount = originalPayload.get("retryCount").getAsInt();
+            }
+
+            // Define um limite de retentativas para evitar loops infinitos
+            if (retryCount < 3) {
+                originalPayload.addProperty("retryCount", retryCount + 1);
+                String messageToRetry = gson.toJson(originalPayload);
+                redisTemplate.convertAndSend(RedisConfig.RETRY_CHANNEL, messageToRetry);
+                log.info("Mensagem enviada para o canal de retry (tentativa {}).", retryCount + 1);
+            } else {
+                log.error("Limite de retentativas atingido. Enviando mensagem para a Dead-Letter Queue (DLQ).");
+                redisTemplate.convertAndSend(RedisConfig.DLQ_CHANNEL, gson.toJson(originalPayload));
+            }
+        } catch (Exception ex) {
+            log.error("Falha CRÍTICA ao enviar mensagem para a fila de retry/DLQ.", ex);
         }
     }
 }

@@ -16,6 +16,8 @@ public class RedisConfig {
 
     private final RedisListener redisListener;
     private static final String CRUD_CHANNEL = "crud-channel";
+    public static final String RETRY_CHANNEL = "retry-channel";
+    public static final String DLQ_CHANNEL = "dlq-channel";
 
     /**
      * Cria um adaptador que conecta a lógica de recebimento de mensagens
