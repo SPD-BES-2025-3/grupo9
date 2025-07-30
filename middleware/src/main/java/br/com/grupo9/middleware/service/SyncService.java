@@ -6,6 +6,7 @@ import br.com.grupo9.middleware.repository.odm.*;
 import br.com.grupo9.middleware.repository.orm.*;
 import br.com.grupo9.middleware.transformer.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder; // Import adicionado
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SyncService {
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .create();
 
     // Repositórios
     private final AutorOdmRepository autorOdmRepository;
@@ -63,7 +66,7 @@ public class SyncService {
             log.info("ORM->ODM [{}]: Editora '{}' salva.", op, odm.getNome());
         }
     }
-    
+
     public void syncUsuarioFromOrm(String op, JsonObject payload) {
         Usuario_ORM orm = gson.fromJson(payload, Usuario_ORM.class);
         if ("DELETE".equals(op)) {
@@ -76,7 +79,7 @@ public class SyncService {
             log.info("ORM->ODM [{}]: Usuário '{}' salvo.", op, odm.getEmail());
         }
     }
-    
+
     public void syncLivroFromOrm(String op, JsonObject payload) {
         Livro_ORM orm = gson.fromJson(payload, Livro_ORM.class);
         if ("DELETE".equals(op)) {
@@ -136,7 +139,7 @@ public class SyncService {
             log.info("ODM->ORM [{}]: Editora '{}' salva.", op, orm.getNome());
         }
     }
-    
+
     public void syncUsuarioFromOdm(String op, JsonObject payload) {
         Usuario_ODM odm = gson.fromJson(payload, Usuario_ODM.class);
         if ("DELETE".equals(op)) {
@@ -166,7 +169,7 @@ public class SyncService {
             }
         }
     }
-    
+
     public void syncEmprestimoFromOdm(String op, JsonObject payload) {
         Emprestimo_ODM odm = gson.fromJson(payload, Emprestimo_ODM.class);
         if ("DELETE".equals(op)) {
@@ -174,7 +177,6 @@ public class SyncService {
         } else {
             try {
                 Emprestimo_ORM orm = emprestimoTransformer.toOrm(odm);
-                // Lógica de upsert para empréstimo é complexa. Assumindo criação.
                 emprestimoOrmRepository.save(orm);
                 log.info("ODM->ORM [{}]: Empréstimo do livro '{}' salvo.", op, orm.getLivro().getTitulo());
             } catch (IllegalStateException e) {

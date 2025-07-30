@@ -49,11 +49,11 @@ public class AppController implements Initializable {
     @FXML
     private Button adicionarEmprestimoButton;
     @FXML
+    private Button atualizarEmprestimoButton;
+    @FXML
     private Button salvarEmprestimoButton;
     @FXML
     private Button cancelarEmprestimoButton;
-    @FXML
-    private Button registrarDevolucaoButton;
     @FXML
     private Button deletarEmprestimoButton;
     @FXML
@@ -256,9 +256,15 @@ public class AppController implements Initializable {
     }
 
     @FXML
+    private void handleAtualizarEmprestimo() {
+        if (tabelaEmprestimo.getSelectionModel().getSelectedItem() != null) {
+            setEmprestimoFormState(FormState.EDITING);
+        }
+    }
+
+    @FXML
     private void handleSalvarEmprestimo() {
         try {
-            // Validação para garantir que os campos obrigatórios não estão vazios.
             if (emprestimoUsuarioComboBox.getValue() == null) {
                 showAlert(Alert.AlertType.WARNING, "Por favor, selecione um usuário.");
                 return;
@@ -277,7 +283,9 @@ public class AppController implements Initializable {
             }
 
             Emprestimo emprestimo;
-            if (idEmprestimoField.getText().isEmpty()) {
+            boolean isNew = idEmprestimoField.getText().isEmpty();
+
+            if (isNew) {
                 emprestimo = new Emprestimo();
             } else {
                 emprestimo = emprestimoRepo.loadById(Integer.parseInt(idEmprestimoField.getText()));
@@ -292,7 +300,7 @@ public class AppController implements Initializable {
             emprestimo.setDataDevolucaoReal(localDateToDate(dataDevolucaoRealPicker.getValue()));
 
             Emprestimo emprestimoSalvo;
-            if (emprestimo.getId() == 0) {
+            if (isNew) {
                 emprestimoSalvo = emprestimoRepo.create(emprestimo);
                 showAlert(Alert.AlertType.INFORMATION, "Empréstimo registrado!");
             } else {
@@ -333,35 +341,19 @@ public class AppController implements Initializable {
     }
 
     private void setEmprestimoFormState(FormState state) {
-        // --- INÍCIO DA CORREÇÃO ---
-        // Lógica de estado refeita para ser mais clara e intuitiva.
-        boolean isAdding = state == FormState.ADDING;
+        boolean disabled = (state == FormState.INITIAL || state == FormState.VIEWING);
         boolean isViewing = state == FormState.VIEWING;
 
-        // Campos do formulário são editáveis apenas ao adicionar um novo empréstimo.
-        emprestimoUsuarioComboBox.setDisable(!isAdding);
-        emprestimoLivroComboBox.setDisable(!isAdding);
-        dataEmprestimoPicker.setDisable(!isAdding);
-        dataDevolucaoPrevistaPicker.setDisable(!isAdding);
-
-        // Verifica se o empréstimo visualizado já foi devolvido.
-        boolean devolvido = dataDevolucaoRealPicker.getValue() != null;
-        // O campo de devolução real só é editável ao visualizar um empréstimo ainda não devolvido.
-        dataDevolucaoRealPicker.setDisable(!isViewing || devolvido);
-
-        // Lógica dos botões
-        adicionarEmprestimoButton.setDisable(isAdding);
+        emprestimoUsuarioComboBox.setDisable(disabled);
+        emprestimoLivroComboBox.setDisable(disabled);
+        dataEmprestimoPicker.setDisable(disabled);
+        dataDevolucaoPrevistaPicker.setDisable(disabled);
+        dataDevolucaoRealPicker.setDisable(disabled);
+        adicionarEmprestimoButton.setDisable(!disabled);
+        atualizarEmprestimoButton.setDisable(!isViewing);
         deletarEmprestimoButton.setDisable(!isViewing);
-
-        // O botão Salvar é habilitado ao adicionar um novo empréstimo OU ao visualizar um empréstimo aberto (para permitir o registro da devolução).
-        boolean podeSalvar = isAdding || (isViewing && !devolvido);
-        salvarEmprestimoButton.setDisable(!podeSalvar);
-        cancelarEmprestimoButton.setDisable(!podeSalvar);
-
-        // O botão "Registrar Devolução" não é mais necessário e será escondido.
-        registrarDevolucaoButton.setVisible(false);
-        registrarDevolucaoButton.setManaged(false); // Remove o botão do layout para não ocupar espaço.
-        // --- FIM DA CORREÇÃO ---
+        salvarEmprestimoButton.setDisable(disabled);
+        cancelarEmprestimoButton.setDisable(disabled);
     }
 
     private void clearEmprestimoForm() {
@@ -908,12 +900,15 @@ public class AppController implements Initializable {
 
     private LocalDate dateToLocalDate(Date date) {
         if (date == null) return null;
+        if (date instanceof java.sql.Date) {
+            return ((java.sql.Date) date).toLocalDate();
+        }
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     private Date localDateToDate(LocalDate localDate) {
         if (localDate == null) return null;
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return java.sql.Date.valueOf(localDate);
     }
 
     @FXML
@@ -925,5 +920,5 @@ public class AppController implements Initializable {
     private void onSobreAction(ActionEvent event) {
         showAlert(Alert.AlertType.INFORMATION, "Sistema de Gerenciamento de Biblioteca v2.1 - JPA Edition");
     }
-//endregio
+//endregion
 }
