@@ -21,7 +21,7 @@ public class Livro_ORM {
     @JoinColumn(name = "editora_id", nullable = false)
     private Editora_ORM editora;
 
-    @Column
+    @Column(name = "anoPublicacao")
     private int anoPublicacao;
 
     @Column

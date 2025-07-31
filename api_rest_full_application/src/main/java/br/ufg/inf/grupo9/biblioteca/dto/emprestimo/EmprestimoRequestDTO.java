@@ -1,5 +1,6 @@
 package br.ufg.inf.grupo9.biblioteca.dto.emprestimo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,9 +20,12 @@ public class EmprestimoRequestDTO {
 
     private String idLivro;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataEmprestimo;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataDevolucaoPrevista;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataDevolucaoRealizada;
 }

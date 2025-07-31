@@ -12,8 +12,12 @@ import org.springframework.stereotype.Service;
 public class RedisPublisher {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final String CRUD_CHANNEL = "crud-channel";
+
+    private final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")  // Formato ISO 8601
+            .setPrettyPrinting()
+            .create();
 
     public enum OperationType { CREATE, UPDATE, DELETE }
 

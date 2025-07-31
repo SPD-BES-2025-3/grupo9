@@ -94,13 +94,13 @@ public class EmprestimoService {
      * @return O emprestimo recém-criada, encapsulada em ResponseEntity.
      */
     public EmprestimoResponseDTO createEmprestimo(EmprestimoRequestDTO emprestimoRequestDTO) {
+        System.out.println("Entrou no método createEmprestimo");
+
         Usuario usuario = usuarioRepository.findById(emprestimoRequestDTO.getIdUsuario())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         Livro livro = livroRepository.findById(emprestimoRequestDTO.getIdLivro())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Livro não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
 
         Emprestimo emprestimo = emprestimoAdapter.toEmprestimo(emprestimoRequestDTO, usuario, livro);
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
