@@ -21,7 +21,7 @@ branch: thayliny
 - 00fc22bfd7ca9118eb3268f08f2c2d86adcecd66 - atualização dos Diagramas
 - 473309e7544ceafa43fbff67431fae9290678bc5 - atualização da documentação 
 
-## Apreendizados 
+## Aprendizados 
 
 Foi bastante desafiador aprender tantas tecnologias em tão pouco tempo, mas ao mesmo tempo também foi bastante supreendente conseguir  aprender tanto, não só de forma téorica como prática. Pra mim ver que haviamos aclopado as regras de négocio a interface e descobrir como fazer teste unitário mesmo nesse cenário, foi de longe umas das atividades mais desafiadoras. Me fez perceber que é importante a comunicação e ir em busca de soluções ao invés de se debater sobre quem fez o que errado.
 
