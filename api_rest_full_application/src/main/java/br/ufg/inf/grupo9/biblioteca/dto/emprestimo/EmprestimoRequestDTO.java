@@ -1,9 +1,9 @@
 package br.ufg.inf.grupo9.biblioteca.dto.emprestimo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -20,16 +20,19 @@ public class EmprestimoRequestDTO {
 
     private String idLivro;
 
-    private LocalDate dataEmprestimo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private Date dataEmprestimo;
 
-    private LocalDate dataDevolucaoPrevista;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private Date dataDevolucaoPrevista;
 
-    private LocalDate dataDevolucaoRealizada;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private Date dataDevolucaoRealizada;
 
     public EmprestimoRequestDTO() {
     }
 
-    public EmprestimoRequestDTO(String idUsuario, String idLivro, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevista, LocalDate dataDevolucaoRealizada) {
+    public EmprestimoRequestDTO(String idUsuario, String idLivro, Date dataEmprestimo, Date dataDevolucaoPrevista, Date dataDevolucaoRealizada) {
         this.idUsuario = idUsuario;
         this.idLivro = idLivro;
         this.dataEmprestimo = dataEmprestimo;
@@ -53,27 +56,27 @@ public class EmprestimoRequestDTO {
         this.idLivro = idLivro;
     }
 
-    public LocalDate getDataEmprestimo() {
+    public Date getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(LocalDate dataEmprestimo) {
+    public void setDataEmprestimo(Date dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public LocalDate getDataDevolucaoPrevista() {
+    public Date getDataDevolucaoPrevista() {
         return dataDevolucaoPrevista;
     }
 
-    public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
+    public void setDataDevolucaoPrevista(Date dataDevolucaoPrevista) {
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
-    public LocalDate getDataDevolucaoRealizada() {
+    public Date getDataDevolucaoRealizada() {
         return dataDevolucaoRealizada;
     }
 
-    public void setDataDevolucaoRealizada(LocalDate dataDevolucaoRealizada) {
+    public void setDataDevolucaoRealizada(Date dataDevolucaoRealizada) {
         this.dataDevolucaoRealizada = dataDevolucaoRealizada;
     }
 }

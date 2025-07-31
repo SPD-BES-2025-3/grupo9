@@ -14,6 +14,7 @@ public class RedisPublisher {
 
     public RedisPublisher() {
         this.gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .setPrettyPrinting()
                 .create();
     }
@@ -31,16 +32,14 @@ public class RedisPublisher {
         }
 
         try {
-            // Cria um "envelope" JSON para a mensagem
             JsonObject messageObject = new JsonObject();
+            messageObject.addProperty("source", "ORM_Desktop");
             messageObject.addProperty("operation", operation.name());
             messageObject.addProperty("entityType", entity.getClass().getSimpleName());
-            // Adiciona a entidade serializada como um objeto JSON aninhado (o "payload")
             messageObject.add("payload", gson.toJsonTree(entity));
 
             String message = gson.toJson(messageObject);
 
-            // Obtém os comandos síncronos e publica a mensagem
             RedisCommands<String, String> commands = connection.sync();
             commands.publish(CRUD_CHANNEL, message);
 

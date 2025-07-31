@@ -6,6 +6,7 @@ import br.ufg.inf.grupo9.biblioteca.dto.emprestimo.EmprestimoResponseDTO;
 import br.ufg.inf.grupo9.biblioteca.model.Emprestimo;
 import br.ufg.inf.grupo9.biblioteca.model.Livro;
 import br.ufg.inf.grupo9.biblioteca.model.Usuario;
+import br.ufg.inf.grupo9.biblioteca.pubsub.RedisPublisher;
 import br.ufg.inf.grupo9.biblioteca.repository.EmprestimoRepository;
 import br.ufg.inf.grupo9.biblioteca.repository.LivroRepository;
 import br.ufg.inf.grupo9.biblioteca.repository.UsuarioRepository;
@@ -26,6 +27,7 @@ public class EmprestimoService {
     private final LivroRepository livroRepository;
     private final UsuarioRepository usuarioRepository;
     private final EmprestimoAdapter emprestimoAdapter;
+    private final RedisPublisher redisPublisher;
 
     /**
      * Obtém todos os emprestimo.
@@ -92,16 +94,17 @@ public class EmprestimoService {
      * @return O emprestimo recém-criada, encapsulada em ResponseEntity.
      */
     public EmprestimoResponseDTO createEmprestimo(EmprestimoRequestDTO emprestimoRequestDTO) {
+        System.out.println("Entrou no método createEmprestimo");
+
         Usuario usuario = usuarioRepository.findById(emprestimoRequestDTO.getIdUsuario())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         Livro livro = livroRepository.findById(emprestimoRequestDTO.getIdLivro())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Livro não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
 
         Emprestimo emprestimo = emprestimoAdapter.toEmprestimo(emprestimoRequestDTO, usuario, livro);
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+        redisPublisher.publish(RedisPublisher.OperationType.CREATE, emprestimoSalvo);
 
         return emprestimoAdapter.toEmprestimoDTO(emprestimoSalvo);
     }
@@ -129,6 +132,7 @@ public class EmprestimoService {
         Emprestimo emprestimoAtualizado = emprestimoAdapter.toEmprestimo(emprestimoRequestDTO, usuario, livro);
         emprestimoAtualizado.setId(emprestimoFound.getId());
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimoAtualizado);
+        redisPublisher.publish(RedisPublisher.OperationType.UPDATE, emprestimoSalvo);
 
         return emprestimoAdapter.toEmprestimoDTO(emprestimoSalvo);
     }
@@ -145,5 +149,6 @@ public class EmprestimoService {
                         HttpStatus.NOT_FOUND, "Emprestimo não encontrado"));
 
         this.emprestimoRepository.delete(emprestimo);
+        redisPublisher.publish(RedisPublisher.OperationType.DELETE, emprestimo);
     }
 }

@@ -22,7 +22,8 @@ public class AppController implements Initializable {
 
     //region FXML Components & Repositories
     // --- GERAL ---
-    private enum FormState { INITIAL, VIEWING, ADDING, EDITING, EDITING_DEVOLUCAO }
+    private enum FormState {INITIAL, VIEWING, ADDING, EDITING}
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // --- REPOSITÓRIOS ---
@@ -34,107 +35,167 @@ public class AppController implements Initializable {
 
     // --- COMPONENTES FXML: EMPRÉSTIMO ---
     @FXML
-    TextField idEmprestimoField;
+    private TextField idEmprestimoField;
     @FXML
-    ComboBox<Usuario> emprestimoUsuarioComboBox;
+    private ComboBox<Usuario> emprestimoUsuarioComboBox;
     @FXML
-    ComboBox<Livro> emprestimoLivroComboBox;
+    private ComboBox<Livro> emprestimoLivroComboBox;
     @FXML
-    DatePicker dataEmprestimoPicker;
+    private DatePicker dataEmprestimoPicker;
     @FXML
-    DatePicker dataDevolucaoPrevistaPicker;
+    private DatePicker dataDevolucaoPrevistaPicker;
     @FXML
-    DatePicker dataDevolucaoRealPicker;
+    private DatePicker dataDevolucaoRealPicker;
     @FXML
-    Button adicionarEmprestimoButton;
+    private Button adicionarEmprestimoButton;
     @FXML
-    public Button salvarEmprestimoButton;
+    private Button atualizarEmprestimoButton;
     @FXML
-    public Button cancelarEmprestimoButton;
+    private Button salvarEmprestimoButton;
     @FXML
-    public Button registrarDevolucaoButton;
+    private Button cancelarEmprestimoButton;
     @FXML
-    public Button deletarEmprestimoButton;
-    @FXML private TableView<EmprestimoView> tabelaEmprestimo;
-    @FXML private TableColumn<EmprestimoView, Integer> idEmprestimoCol;
-    @FXML private TableColumn<EmprestimoView, String> usuarioEmprestimoCol;
-    @FXML private TableColumn<EmprestimoView, String> livroEmprestimoCol;
-    @FXML private TableColumn<EmprestimoView, String> dataEmprestimoCol;
-    @FXML private TableColumn<EmprestimoView, String> dataDevolucaoPrevistaCol;
-    @FXML private TableColumn<EmprestimoView, String> dataDevolucaoRealCol;
+    private Button deletarEmprestimoButton;
+    @FXML
+    private TableView<EmprestimoView> tabelaEmprestimo;
+    @FXML
+    private TableColumn<EmprestimoView, Integer> idEmprestimoCol;
+    @FXML
+    private TableColumn<EmprestimoView, String> usuarioEmprestimoCol;
+    @FXML
+    private TableColumn<EmprestimoView, String> livroEmprestimoCol;
+    @FXML
+    private TableColumn<EmprestimoView, String> dataEmprestimoCol;
+    @FXML
+    private TableColumn<EmprestimoView, String> dataDevolucaoPrevistaCol;
+    @FXML
+    private TableColumn<EmprestimoView, String> dataDevolucaoRealCol;
 
     // --- COMPONENTES FXML: LIVRO ---
-    @FXML private TextField idLivroField;
-    @FXML private TextField tituloLivroField;
-    @FXML private TextField anoPublicacaoLivroField;
-    @FXML private TextField precoLivroField;
-    @FXML private ComboBox<Autor> livroAutorComboBox;
-    @FXML private ComboBox<Editora> livroEditoraComboBox;
-    @FXML private Button adicionarLivroButton;
-    @FXML private Button atualizarLivroButton;
-    @FXML private Button deletarLivroButton;
-    @FXML private Button salvarLivroButton;
-    @FXML private Button cancelarLivroButton;
-    @FXML private TableView<LivroView> tabelaLivro;
-    @FXML private TableColumn<LivroView, Integer> idLivroCol;
-    @FXML private TableColumn<LivroView, String> tituloLivroCol;
-    @FXML private TableColumn<LivroView, String> autorLivroCol;
-    @FXML private TableColumn<LivroView, String> editoraLivroCol;
-    @FXML private TableColumn<LivroView, Integer> anoPublicacaoLivroCol;
-    @FXML private TableColumn<LivroView, Double> precoLivroCol;
+    @FXML
+    private TextField idLivroField;
+    @FXML
+    private TextField tituloLivroField;
+    @FXML
+    private TextField anoPublicacaoLivroField;
+    @FXML
+    private TextField precoLivroField;
+    @FXML
+    private ComboBox<Autor> livroAutorComboBox;
+    @FXML
+    private ComboBox<Editora> livroEditoraComboBox;
+    @FXML
+    private Button adicionarLivroButton;
+    @FXML
+    private Button atualizarLivroButton;
+    @FXML
+    private Button deletarLivroButton;
+    @FXML
+    private Button salvarLivroButton;
+    @FXML
+    private Button cancelarLivroButton;
+    @FXML
+    private TableView<LivroView> tabelaLivro;
+    @FXML
+    private TableColumn<LivroView, Integer> idLivroCol;
+    @FXML
+    private TableColumn<LivroView, String> tituloLivroCol;
+    @FXML
+    private TableColumn<LivroView, String> autorLivroCol;
+    @FXML
+    private TableColumn<LivroView, String> editoraLivroCol;
+    @FXML
+    private TableColumn<LivroView, Integer> anoPublicacaoLivroCol;
+    @FXML
+    private TableColumn<LivroView, Double> precoLivroCol;
 
     // --- COMPONENTES FXML: AUTOR ---
-    @FXML private TextField idAutorField;
-    @FXML private TextField nomeAutorField;
-    @FXML private TextField nacionalidadeAutorField;
-    @FXML private Button adicionarAutorButton;
-    @FXML private Button atualizarAutorButton;
-    @FXML private Button deletarAutorButton;
-    @FXML private Button salvarAutorButton;
-    @FXML private Button cancelarAutorButton;
     @FXML
-    public TableView<Autor> tabelaAutor;
-    @FXML private TableColumn<Autor, Integer> idAutorCol;
-    @FXML private TableColumn<Autor, String> nomeAutorCol;
-    @FXML private TableColumn<Autor, String> nacionalidadeAutorCol;
+    private TextField idAutorField;
+    @FXML
+    private TextField nomeAutorField;
+    @FXML
+    private TextField nacionalidadeAutorField;
+    @FXML
+    private Button adicionarAutorButton;
+    @FXML
+    private Button atualizarAutorButton;
+    @FXML
+    private Button deletarAutorButton;
+    @FXML
+    private Button salvarAutorButton;
+    @FXML
+    private Button cancelarAutorButton;
+    @FXML
+    private TableView<Autor> tabelaAutor;
+    @FXML
+    private TableColumn<Autor, Integer> idAutorCol;
+    @FXML
+    private TableColumn<Autor, String> nomeAutorCol;
+    @FXML
+    private TableColumn<Autor, String> nacionalidadeAutorCol;
 
     // --- COMPONENTES FXML: EDITORA ---
-    @FXML private TextField idEditoraField;
-    @FXML private TextField nomeEditoraField;
-    @FXML private TextField enderecoEditoraField;
-    @FXML private TextField telefoneEditoraField;
-    @FXML private Button adicionarEditoraButton;
-    @FXML private Button atualizarEditoraButton;
-    @FXML private Button deletarEditoraButton;
-    @FXML private Button salvarEditoraButton;
-    @FXML private Button cancelarEditoraButton;
-    @FXML private TableView<Editora> tabelaEditora;
-    @FXML private TableColumn<Editora, Integer> idEditoraCol;
-    @FXML private TableColumn<Editora, String> nomeEditoraCol;
-    @FXML private TableColumn<Editora, String> enderecoEditoraCol;
-    @FXML private TableColumn<Editora, String> telefoneEditoraCol;
+    @FXML
+    private TextField idEditoraField;
+    @FXML
+    private TextField nomeEditoraField;
+    @FXML
+    private TextField enderecoEditoraField;
+    @FXML
+    private TextField telefoneEditoraField;
+    @FXML
+    private Button adicionarEditoraButton;
+    @FXML
+    private Button atualizarEditoraButton;
+    @FXML
+    private Button deletarEditoraButton;
+    @FXML
+    private Button salvarEditoraButton;
+    @FXML
+    private Button cancelarEditoraButton;
+    @FXML
+    private TableView<Editora> tabelaEditora;
+    @FXML
+    private TableColumn<Editora, Integer> idEditoraCol;
+    @FXML
+    private TableColumn<Editora, String> nomeEditoraCol;
+    @FXML
+    private TableColumn<Editora, String> enderecoEditoraCol;
+    @FXML
+    private TableColumn<Editora, String> telefoneEditoraCol;
 
     // --- COMPONENTES FXML: USUÁRIO ---
     @FXML
-    TextField idUsuarioField;
+    private TextField idUsuarioField;
     @FXML
-    TextField nomeUsuarioField;
+    private TextField nomeUsuarioField;
     @FXML
-    TextField emailUsuarioField;
+    private TextField emailUsuarioField;
     @FXML
-    TextField telefoneUsuarioField;
+    private TextField telefoneUsuarioField;
     @FXML
-    PasswordField senhaUsuarioField;
-    @FXML private Button adicionarUsuarioButton;
-    @FXML private Button atualizarUsuarioButton;
-    @FXML private Button deletarUsuarioButton;
-    @FXML private Button salvarUsuarioButton;
-    @FXML private Button cancelarUsuarioButton;
-    @FXML private TableView<Usuario> tabelaUsuario;
-    @FXML private TableColumn<Usuario, Integer> idUsuarioCol;
-    @FXML private TableColumn<Usuario, String> nomeUsuarioCol;
-    @FXML private TableColumn<Usuario, String> emailUsuarioCol;
-    @FXML private TableColumn<Usuario, String> telefoneUsuarioCol;
+    private PasswordField senhaUsuarioField;
+    @FXML
+    private Button adicionarUsuarioButton;
+    @FXML
+    private Button atualizarUsuarioButton;
+    @FXML
+    private Button deletarUsuarioButton;
+    @FXML
+    private Button salvarUsuarioButton;
+    @FXML
+    private Button cancelarUsuarioButton;
+    @FXML
+    private TableView<Usuario> tabelaUsuario;
+    @FXML
+    private TableColumn<Usuario, Integer> idUsuarioCol;
+    @FXML
+    private TableColumn<Usuario, String> nomeUsuarioCol;
+    @FXML
+    private TableColumn<Usuario, String> emailUsuarioCol;
+    @FXML
+    private TableColumn<Usuario, String> telefoneUsuarioCol;
     //endregion
 
     @Override
@@ -186,18 +247,50 @@ public class AppController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleAdicionarEmprestimo() {
+        clearEmprestimoForm();
+        setEmprestimoFormState(FormState.ADDING);
+        dataEmprestimoPicker.setValue(LocalDate.now());
+        dataDevolucaoPrevistaPicker.setValue(LocalDate.now().plusWeeks(2));
+    }
 
+    @FXML
+    private void handleAtualizarEmprestimo() {
+        if (tabelaEmprestimo.getSelectionModel().getSelectedItem() != null) {
+            setEmprestimoFormState(FormState.EDITING);
+        }
+    }
 
-
-
-    @FXML private void handleSalvarEmprestimo() {
+    @FXML
+    private void handleSalvarEmprestimo() {
         try {
+            if (emprestimoUsuarioComboBox.getValue() == null) {
+                showAlert(Alert.AlertType.WARNING, "Por favor, selecione um usuário.");
+                return;
+            }
+            if (emprestimoLivroComboBox.getValue() == null) {
+                showAlert(Alert.AlertType.WARNING, "Por favor, selecione um livro.");
+                return;
+            }
+            if (dataEmprestimoPicker.getValue() == null) {
+                showAlert(Alert.AlertType.WARNING, "Por favor, informe a data do empréstimo.");
+                return;
+            }
+            if (dataDevolucaoPrevistaPicker.getValue() == null) {
+                showAlert(Alert.AlertType.WARNING, "Por favor, informe a data de devolução prevista.");
+                return;
+            }
+
             Emprestimo emprestimo;
-            if (idEmprestimoField.getText().isEmpty()) {
+            boolean isNew = idEmprestimoField.getText().isEmpty();
+
+            if (isNew) {
                 emprestimo = new Emprestimo();
             } else {
                 emprestimo = emprestimoRepo.loadById(Integer.parseInt(idEmprestimoField.getText()));
-                if (emprestimo == null) throw new IllegalStateException("Empréstimo não encontrado para o ID fornecido.");
+                if (emprestimo == null)
+                    throw new IllegalStateException("Empréstimo não encontrado para o ID fornecido.");
             }
 
             emprestimo.setUsuario(emprestimoUsuarioComboBox.getValue());
@@ -207,7 +300,7 @@ public class AppController implements Initializable {
             emprestimo.setDataDevolucaoReal(localDateToDate(dataDevolucaoRealPicker.getValue()));
 
             Emprestimo emprestimoSalvo;
-            if (emprestimo.getId() == 0) {
+            if (isNew) {
                 emprestimoSalvo = emprestimoRepo.create(emprestimo);
                 showAlert(Alert.AlertType.INFORMATION, "Empréstimo registrado!");
             } else {
@@ -229,15 +322,17 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleCancelarEmprestimo() {
+    @FXML
+    private void handleCancelarEmprestimo() {
         handleEmprestimoSelected(tabelaEmprestimo.getSelectionModel().getSelectedItem());
     }
 
-    @FXML private void handleDeletarEmprestimo() {
+    @FXML
+    private void handleDeletarEmprestimo() {
         EmprestimoView selected = tabelaEmprestimo.getSelectionModel().getSelectedItem();
         if (selected != null) {
             Emprestimo emprestimoParaDeletar = emprestimoRepo.loadById(selected.getId());
-            if(emprestimoParaDeletar != null) {
+            if (emprestimoParaDeletar != null) {
                 emprestimoRepo.delete(emprestimoParaDeletar);
                 showAlert(Alert.AlertType.INFORMATION, "Registro de empréstimo excluído.");
                 loadEmprestimosData();
@@ -245,7 +340,21 @@ public class AppController implements Initializable {
         }
     }
 
+    private void setEmprestimoFormState(FormState state) {
+        boolean disabled = (state == FormState.INITIAL || state == FormState.VIEWING);
+        boolean isViewing = state == FormState.VIEWING;
 
+        emprestimoUsuarioComboBox.setDisable(disabled);
+        emprestimoLivroComboBox.setDisable(disabled);
+        dataEmprestimoPicker.setDisable(disabled);
+        dataDevolucaoPrevistaPicker.setDisable(disabled);
+        dataDevolucaoRealPicker.setDisable(disabled);
+        adicionarEmprestimoButton.setDisable(!disabled);
+        atualizarEmprestimoButton.setDisable(!isViewing);
+        deletarEmprestimoButton.setDisable(!isViewing);
+        salvarEmprestimoButton.setDisable(disabled);
+        cancelarEmprestimoButton.setDisable(disabled);
+    }
 
     private void clearEmprestimoForm() {
         idEmprestimoField.clear();
@@ -297,23 +406,26 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleAdicionarLivro() {
+    @FXML
+    private void handleAdicionarLivro() {
         clearLivroForm();
         setLivroFormState(FormState.ADDING);
     }
 
-    @FXML private void handleAtualizarLivro() {
+    @FXML
+    private void handleAtualizarLivro() {
         if (tabelaLivro.getSelectionModel().getSelectedItem() != null) setLivroFormState(FormState.EDITING);
     }
 
-    @FXML private void handleSalvarLivro() {
+    @FXML
+    private void handleSalvarLivro() {
         try {
             Livro livro;
             if (idLivroField.getText().isEmpty()) {
                 livro = new Livro();
             } else {
                 livro = livroRepo.loadById(Integer.parseInt(idLivroField.getText()));
-                if(livro == null) throw new IllegalStateException("Livro não encontrado para o ID fornecido.");
+                if (livro == null) throw new IllegalStateException("Livro não encontrado para o ID fornecido.");
             }
 
             livro.setTitulo(tituloLivroField.getText());
@@ -346,11 +458,29 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleCancelarLivro() {
+    @FXML
+    private void handleCancelarLivro() {
         handleLivroSelected(tabelaLivro.getSelectionModel().getSelectedItem());
     }
 
-
+    @FXML
+    private void handleDeletarLivro() {
+        LivroView selected = tabelaLivro.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            Livro livroParaDeletar = livroRepo.loadById(selected.getId());
+            if (livroParaDeletar != null) {
+                try {
+                    livroRepo.delete(livroParaDeletar);
+                    showAlert(Alert.AlertType.INFORMATION, "Livro deletado.");
+                    loadLivrosData();
+                    loadEmprestimosData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Não é possível deletar este livro pois ele está vinculado a um empréstimo.");
+                }
+            }
+        }
+    }
 
     private void setLivroFormState(FormState state) {
         boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
@@ -403,23 +533,26 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleAdicionarAutor() {
+    @FXML
+    private void handleAdicionarAutor() {
         clearAutorForm();
         setAutorFormState(FormState.ADDING);
     }
 
-    @FXML private void handleAtualizarAutor() {
+    @FXML
+    private void handleAtualizarAutor() {
         if (tabelaAutor.getSelectionModel().getSelectedItem() != null) setAutorFormState(FormState.EDITING);
     }
 
-    @FXML private void handleSalvarAutor() {
+    @FXML
+    private void handleSalvarAutor() {
         try {
             Autor autor;
             if (idAutorField.getText().isEmpty()) {
                 autor = new Autor();
             } else {
                 autor = autorRepo.loadById(Integer.parseInt(idAutorField.getText()));
-                if(autor == null) throw new IllegalStateException("Autor não encontrado para o ID fornecido.");
+                if (autor == null) throw new IllegalStateException("Autor não encontrado para o ID fornecido.");
             }
             autor.setNome(nomeAutorField.getText());
             autor.setNacionalidade(nacionalidadeAutorField.getText());
@@ -434,7 +567,7 @@ public class AppController implements Initializable {
                 showAlert(Alert.AlertType.INFORMATION, "Autor atualizado!");
             }
 
-            if(autorSalvo != null) {
+            if (autorSalvo != null) {
                 loadAutoresData();
                 loadLivrosData();
                 tabelaAutor.getSelectionModel().select(autorSalvo);
@@ -448,11 +581,26 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleCancelarAutor() {
+    @FXML
+    private void handleCancelarAutor() {
         handleAutorSelected(tabelaAutor.getSelectionModel().getSelectedItem());
     }
 
-
+    @FXML
+    private void handleDeletarAutor() {
+        Autor selected = tabelaAutor.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                autorRepo.delete(selected);
+                showAlert(Alert.AlertType.INFORMATION, "Autor deletado.");
+                loadAutoresData();
+                loadLivrosData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Não é possível deletar este autor pois ele está vinculado a um ou mais livros.");
+            }
+        }
+    }
 
     private void setAutorFormState(FormState state) {
         boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
@@ -500,23 +648,26 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleAdicionarEditora() {
+    @FXML
+    private void handleAdicionarEditora() {
         clearEditoraForm();
         setEditoraFormState(FormState.ADDING);
     }
 
-    @FXML private void handleAtualizarEditora() {
+    @FXML
+    private void handleAtualizarEditora() {
         if (tabelaEditora.getSelectionModel().getSelectedItem() != null) setEditoraFormState(FormState.EDITING);
     }
 
-    @FXML private void handleSalvarEditora() {
+    @FXML
+    private void handleSalvarEditora() {
         try {
             Editora editora;
             if (idEditoraField.getText().isEmpty()) {
                 editora = new Editora();
             } else {
                 editora = editoraRepo.loadById(Integer.parseInt(idEditoraField.getText()));
-                if(editora == null) throw new IllegalStateException("Editora não encontrada para o ID fornecido.");
+                if (editora == null) throw new IllegalStateException("Editora não encontrada para o ID fornecido.");
             }
             editora.setNome(nomeEditoraField.getText());
             editora.setEndereco(enderecoEditoraField.getText());
@@ -532,7 +683,7 @@ public class AppController implements Initializable {
                 showAlert(Alert.AlertType.INFORMATION, "Editora atualizada!");
             }
 
-            if(editoraSalva != null) {
+            if (editoraSalva != null) {
                 loadEditorasData();
                 loadLivrosData();
                 tabelaEditora.getSelectionModel().select(editoraSalva);
@@ -545,11 +696,26 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleCancelarEditora() {
+    @FXML
+    private void handleCancelarEditora() {
         handleEditoraSelected(tabelaEditora.getSelectionModel().getSelectedItem());
     }
 
-
+    @FXML
+    private void handleDeletarEditora() {
+        Editora selected = tabelaEditora.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                editoraRepo.delete(selected);
+                showAlert(Alert.AlertType.INFORMATION, "Editora deletada.");
+                loadEditorasData();
+                loadLivrosData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Não é possível deletar esta editora pois ela está vinculada a um ou mais livros.");
+            }
+        }
+    }
 
     private void setEditoraFormState(FormState state) {
         boolean disabled = state == FormState.INITIAL || state == FormState.VIEWING;
@@ -600,18 +766,80 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML private void handleAdicionarUsuario() {
+    @FXML
+    private void handleAdicionarUsuario() {
         clearUsuarioForm();
         setUsuarioFormState(FormState.ADDING);
     }
 
-    @FXML private void handleAtualizarUsuario() {
+    @FXML
+    private void handleAtualizarUsuario() {
         if (tabelaUsuario.getSelectionModel().getSelectedItem() != null) setUsuarioFormState(FormState.EDITING);
     }
 
+    @FXML
+    private void handleSalvarUsuario() {
+        try {
+            Usuario usuario;
+            if (idUsuarioField.getText().isEmpty()) {
+                usuario = new Usuario();
+            } else {
+                usuario = usuarioRepo.loadById(Integer.parseInt(idUsuarioField.getText()));
+                if (usuario == null) throw new IllegalStateException("Usuário não encontrado para o ID fornecido.");
+            }
+            usuario.setNome(nomeUsuarioField.getText());
+            usuario.setEmail(emailUsuarioField.getText());
+            usuario.setTelefone(telefoneUsuarioField.getText());
 
-    @FXML private void handleCancelarUsuario() {
+            if (senhaUsuarioField.getText() != null && !senhaUsuarioField.getText().isEmpty()) {
+                usuario.setSenha(senhaUsuarioField.getText()); // Idealmente, usar hash
+            } else if (usuario.getId() == 0) {
+                throw new Exception("Senha é obrigatória para novos usuários.");
+            }
+
+            Usuario usuarioSalvo;
+            if (usuario.getId() == 0) {
+                usuarioSalvo = usuarioRepo.create(usuario);
+                showAlert(Alert.AlertType.INFORMATION, "Usuário salvo!");
+            } else {
+                usuarioRepo.update(usuario);
+                usuarioSalvo = usuario;
+                showAlert(Alert.AlertType.INFORMATION, "Usuário atualizado!");
+            }
+
+            if (usuarioSalvo != null) {
+                loadUsuariosData();
+                loadEmprestimosData();
+                tabelaUsuario.getSelectionModel().select(usuarioSalvo);
+            } else {
+                showAlert(Alert.AlertType.ERROR, "O usuário não pôde ser salvo no banco de dados.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Ocorreu um erro ao salvar o usuário:\n" + e.toString());
+        }
+    }
+
+    @FXML
+    private void handleCancelarUsuario() {
         handleUsuarioSelected(tabelaUsuario.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    private void handleDeletarUsuario() {
+        Usuario selected = tabelaUsuario.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                usuarioRepo.delete(selected);
+                showAlert(Alert.AlertType.INFORMATION, "Usuário deletado.");
+                loadUsuariosData();
+                loadEmprestimosData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Não é possível deletar este usuário pois ele está vinculado a um ou mais empréstimos.");
+            }
+        }
     }
 
     private void setUsuarioFormState(FormState state) {
@@ -672,12 +900,15 @@ public class AppController implements Initializable {
 
     private LocalDate dateToLocalDate(Date date) {
         if (date == null) return null;
+        if (date instanceof java.sql.Date) {
+            return ((java.sql.Date) date).toLocalDate();
+        }
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     private Date localDateToDate(LocalDate localDate) {
         if (localDate == null) return null;
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return java.sql.Date.valueOf(localDate);
     }
 
     @FXML
@@ -689,7 +920,6 @@ public class AppController implements Initializable {
     private void onSobreAction(ActionEvent event) {
         showAlert(Alert.AlertType.INFORMATION, "Sistema de Gerenciamento de Biblioteca v2.1 - JPA Edition");
     }
-
 
     /***********************************************************************************************************************/
     /******* REGRA DE NÉGOCIO PARA TESTE UNITÁRIO COM JUNIT 5 **************************************************************/
@@ -840,6 +1070,4 @@ public class AppController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Ocorreu um erro ao salvar o usuário:\n" + e.toString());
         }
     }
-
-
 }

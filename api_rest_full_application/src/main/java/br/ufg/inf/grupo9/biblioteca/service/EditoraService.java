@@ -3,6 +3,7 @@ package br.ufg.inf.grupo9.biblioteca.service;
 import br.ufg.inf.grupo9.biblioteca.adapter.EditoraAdapter;
 import br.ufg.inf.grupo9.biblioteca.dto.editora.EditoraRequestDTO;
 import br.ufg.inf.grupo9.biblioteca.dto.editora.EditoraResponseDTO;
+import br.ufg.inf.grupo9.biblioteca.pubsub.RedisPublisher;
 import br.ufg.inf.grupo9.biblioteca.repository.EditoraRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class EditoraService {
 
     private final EditoraRepository editoraRepository;
     private final EditoraAdapter editoraAdapter;
-
+    private final RedisPublisher redisPublisher;
     /**
      * Obtém todas as editoras.
      *
@@ -68,6 +69,7 @@ public class EditoraService {
     public EditoraResponseDTO createEditora(EditoraRequestDTO editoraRequestDTO) {
         final var editora = this.editoraAdapter.toEditora(editoraRequestDTO);
         final var editoraSalva = this.editoraRepository.save(editora);
+        redisPublisher.publish(RedisPublisher.OperationType.CREATE, editoraSalva);
 
         return this.editoraAdapter.toEditoraDTO(editoraSalva);
     }
@@ -88,6 +90,7 @@ public class EditoraService {
         editoraAtualizada.setId(editoraExistente.getId());
 
         final var editoraSalva = this.editoraRepository.save(editoraAtualizada);
+        redisPublisher.publish(RedisPublisher.OperationType.UPDATE, editoraSalva);
         return this.editoraAdapter.toEditoraDTO(editoraSalva);
     }
 
@@ -103,5 +106,6 @@ public class EditoraService {
                         HttpStatus.NOT_FOUND, "Editora não encontrado"));
 
         this.editoraRepository.delete(editora);
+        redisPublisher.publish(RedisPublisher.OperationType.DELETE, editora);
     }
 }
