@@ -18,9 +18,9 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     /**
-     * Obtém todas os usuario.
+     * Retorna todos os usuários cadastrados.
      *
-     * @return Uma lista de DTOs de resposta dos usuarios.
+     * @return Lista de usuários.
      */
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> getAllUsuario() {
@@ -29,10 +29,10 @@ public class UsuarioController {
     }
 
     /**
-     * Obtém uma usuario upor ‘ID’.
+     * Busca um usuário pelo ID.
      *
-     * @param id O ‘ID’ da usuario a ser obtida.
-     * @return A usuario encontrada, encapsulada em ResponseEntity.
+     * @param id ID do usuário.
+     * @return Usuário correspondente ao ID.
      */
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable String id) {
@@ -41,63 +41,63 @@ public class UsuarioController {
     }
 
     /**
-     * Obtém usuario por nome.
+     * Busca usuários pelo nome.
      *
-     * @param nome O nome pelo qual as usuarios serão filtradas.
-     * @return Uma lista de usuarios encontradas pela nome, encapsulada em ResponseEntity.
+     * @param nome Nome do usuário.
+     * @return Lista de usuários com o nome fornecido.
      */
     @GetMapping("/nome/{nome}")
     public ResponseEntity<List<UsuarioResponseDTO>> findByNome(@PathVariable String nome) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.usuarioService.getUsuarioByNome(nome));
+                .body(usuarioService.getUsuarioByNome(nome));
     }
 
     /**
-     * Obtém usuarios por email.
+     * Busca usuários pelo e-mail.
      *
-     * @param email O nome pelo qual os usuarios serão filtradas.
-     * @return Uma lista de usuarios encontradas pela email, encapsulada em ResponseEntity.
+     * @param email E-mail do usuário.
+     * @return Lista de usuários com o e-mail fornecido.
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<List<UsuarioResponseDTO>> findByEmail(@PathVariable String email) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.usuarioService.getUsuarioByEmail(email));
+                .body(usuarioService.getUsuarioByEmail(email));
     }
 
     /**
-     * Cria um usuario.
+     * Cria um novo usuário.
      *
-     * @param dto DTO contendo os dados do novo usuario.
-     * @return A usuario recém-criada, encapsulada em ResponseEntity.
+     * @param dto Dados do novo usuário.
+     * @return Usuário criado.
      */
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> create(@RequestBody UsuarioRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.usuarioService.createUsuario(dto));
+                .body(usuarioService.createUsuario(dto));
     }
 
     /**
-     * Atualiza uma usuario.
+     * Atualiza os dados de um usuário.
      *
-     * @param id  ‘ID’ da usuario a ser atualizada.
-     * @param dto DTO contendo os dados da usuario.
-     * @return A usuario atualiza, encapsulada em ResponseEntity.
+     * @param id  ID do usuário.
+     * @param dto Novos dados.
+     * @return Usuário atualizado.
      */
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable String id, @RequestBody UsuarioRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.usuarioService.updateUsuario(id, dto));
+                .body(usuarioService.updateUsuario(id, dto));
     }
 
     /**
-     * Delete uma usuario por ‘ID’.
+     * Deleta um usuário pelo ID.
      *
-     * @param id O ‘ID’ da usuario a ser deletada.
-     * @return ResponseEntity sem corpo indicando que a usuario foi deletada com sucesso.
+     * @param id ID do usuário a ser removido.
+     * @return Resposta sem conteúdo indicando sucesso.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUsuario(@PathVariable String id) {
-        this.usuarioService.deleteUsuario(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        usuarioService.deleteUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 }

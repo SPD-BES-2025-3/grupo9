@@ -865,7 +865,7 @@ public class AppController implements Initializable {
     //endregion
 
     //region Helpers & Menu Actions
-    private void showAlert(Alert.AlertType type, String message) {
+    void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
         alert.setTitle("Informação do Sistema");
         alert.setHeaderText(null);
@@ -920,5 +920,154 @@ public class AppController implements Initializable {
     private void onSobreAction(ActionEvent event) {
         showAlert(Alert.AlertType.INFORMATION, "Sistema de Gerenciamento de Biblioteca v2.1 - JPA Edition");
     }
-//endregion
+
+    /***********************************************************************************************************************/
+    /******* REGRA DE NÉGOCIO PARA TESTE UNITÁRIO COM JUNIT 5 **************************************************************/
+    /************************************************************************************************************************/
+
+
+    @FXML
+    void handleAdicionarEmprestimo() {
+        clearEmprestimoForm();
+        setEmprestimoFormState(FormState.ADDING);
+        dataEmprestimoPicker.setValue(LocalDate.now());
+        dataDevolucaoPrevistaPicker.setValue(LocalDate.now().plusWeeks(2));
+    }
+
+    @FXML private void handleRegistrarDevolucao() {
+        if (tabelaEmprestimo.getSelectionModel().getSelectedItem() != null) {
+            setEmprestimoFormState(FormState.EDITING_DEVOLUCAO);
+            dataDevolucaoRealPicker.setValue(LocalDate.now());
+        }
+    }
+
+
+    private void setEmprestimoFormState(FormState state) {
+        boolean isViewingOrInitial = (state == FormState.INITIAL || state == FormState.VIEWING);
+        emprestimoUsuarioComboBox.setDisable(state != FormState.ADDING);
+        emprestimoLivroComboBox.setDisable(state != FormState.ADDING);
+        dataEmprestimoPicker.setDisable(state != FormState.ADDING);
+        dataDevolucaoPrevistaPicker.setDisable(state != FormState.ADDING);
+        dataDevolucaoRealPicker.setDisable(state != FormState.EDITING_DEVOLUCAO);
+
+        adicionarEmprestimoButton.setDisable(!isViewingOrInitial);
+        salvarEmprestimoButton.setDisable(isViewingOrInitial);
+        cancelarEmprestimoButton.setDisable(isViewingOrInitial);
+        deletarEmprestimoButton.setDisable(state != FormState.VIEWING);
+
+        boolean devolvido = dataDevolucaoRealPicker.getValue() != null;
+        registrarDevolucaoButton.setDisable(state != FormState.VIEWING || devolvido);
+    }
+
+
+    @FXML private void handleDeletarLivro() {
+        LivroView selected = tabelaLivro.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            Livro livroParaDeletar = livroRepo.loadById(selected.getId());
+            if(livroParaDeletar != null) {
+                try {
+                    livroRepo.delete(livroParaDeletar);
+                    showAlert(Alert.AlertType.INFORMATION, "Livro deletado.");
+                    loadLivrosData();
+                    loadEmprestimosData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Não é possível deletar este livro pois ele está vinculado a um empréstimo.");
+                }
+            }
+        }
+    }
+
+
+    @FXML
+    void handleDeletarAutor() {
+        Autor selected = tabelaAutor.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                autorRepo.delete(selected);
+                showAlert(Alert.AlertType.INFORMATION, "Autor deletado.");
+                loadAutoresData();
+                loadLivrosData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Não é possível deletar este autor pois ele está vinculado a um ou mais livros.");
+            }
+        }
+    }
+
+    @FXML private void handleDeletarEditora() {
+        Editora selected = tabelaEditora.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                editoraRepo.delete(selected);
+                showAlert(Alert.AlertType.INFORMATION, "Editora deletada.");
+                loadEditorasData();
+                loadLivrosData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Não é possível deletar esta editora pois ela está vinculada a um ou mais livros.");
+            }
+        }
+    }
+
+    @FXML private void handleDeletarUsuario() {
+        Usuario selected = tabelaUsuario.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                usuarioRepo.delete(selected);
+                showAlert(Alert.AlertType.INFORMATION, "Usuário deletado.");
+                loadUsuariosData();
+                loadEmprestimosData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Não é possível deletar este usuário pois ele está vinculado a um ou mais empréstimos.");
+            }
+        }
+    }
+
+
+
+    @FXML
+    void handleSalvarUsuario() {
+        try {
+            Usuario usuario;
+            if (idUsuarioField.getText().isEmpty()) {
+                usuario = new Usuario();
+            } else {
+                usuario = usuarioRepo.loadById(Integer.parseInt(idUsuarioField.getText()));
+                if(usuario == null) throw new IllegalStateException("Usuário não encontrado para o ID fornecido.");
+            }
+            usuario.setNome(nomeUsuarioField.getText());
+            usuario.setEmail(emailUsuarioField.getText());
+            usuario.setTelefone(telefoneUsuarioField.getText());
+
+            if (senhaUsuarioField.getText() != null && !senhaUsuarioField.getText().isEmpty()) {
+                usuario.setSenha(senhaUsuarioField.getText()); // Idealmente, usar hash
+            } else if (usuario.getId() == 0) {
+                throw new Exception("Senha é obrigatória para novos usuários.");
+            }
+
+            Usuario usuarioSalvo;
+            if (usuario.getId() == 0) {
+                usuarioSalvo = usuarioRepo.create(usuario);
+                showAlert(Alert.AlertType.INFORMATION, "Usuário salvo!");
+            } else {
+                usuarioRepo.update(usuario);
+                usuarioSalvo = usuario;
+                showAlert(Alert.AlertType.INFORMATION, "Usuário atualizado!");
+            }
+
+            if(usuarioSalvo != null) {
+                loadUsuariosData();
+                loadEmprestimosData();
+                tabelaUsuario.getSelectionModel().select(usuarioSalvo);
+            } else {
+                showAlert(Alert.AlertType.ERROR, "O usuário não pôde ser salvo no banco de dados.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Ocorreu um erro ao salvar o usuário:\n" + e.toString());
+        }
+    }
 }
