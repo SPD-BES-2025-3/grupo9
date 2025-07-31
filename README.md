@@ -109,11 +109,16 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 
 ### Arquitetura do Sistema (MVC)
 
-![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-componentes.png)
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/main/diagramas/arquitetura-sistema-biblioteca.png)
 
 ### Diagrama de Sequência para Operações de Integração
 
 ![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-sequencia.png)
+
+
+### Diagrama de Sequência para Operações de Integração Redis 
+
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/main/diagramas/diagrama-sequencia-redis.png)
 
 ## Documentação de Código Inicial
 
