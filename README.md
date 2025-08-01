@@ -12,36 +12,29 @@ O sistema de Gerenciamento de Biblioteca visa simplificar o gerenciamento de uma
 
 ## Objetivo Geral
 
-O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído, composto por uma aplicação desktop (JavaFX, persistência em SQLite, serialização JSON/XML) e uma API RESTful (Spring Boot, persistência em MongoDB), com funcionalidades CRUD completas. Ambos os componentes se integrarão por meio de um barramento de mensagens assíncrono utilizando Redis (Pub/Sub), garantindo a consistência e a reatividade dos dados entre as diferentes interfaces.
+Desenvolver um sistema de gerenciamento de biblioteca distribuído, composto por uma **aplicação desktop** (JavaFX, JPA/Hibernate, SQLite) e uma **API RESTful** (Spring Boot, MongoDB). Ambos os sistemas são integrados por um **middleware** que utiliza um barramento de mensagens assíncrono com **Redis (Pub/Sub)**, garantindo a consistência e a reatividade dos dados entre as diferentes plataformas.
 
 ## Objetivos Específicos
 
-  - **Implementar operações CRUD abrangentes** para as entidades Livro, Autor, Editora, Usuário e Empréstimo, tanto na aplicação desktop quanto na API RESTful.
-
-- **Assegurar a persistência de dados** utilizando SQLite (via ORMLite) para a aplicação desktop e MongoDB (via Spring Data MongoDB) para a API RESTful.
-
-- **Habilitar a comunicação e sincronização de dados** entre a aplicação desktop e a API RESTful por meio de um barramento de mensagens assíncrono utilizando Redis (Pub/Sub), com a biblioteca Lettuce.
-
-- **Permitir a importação e exportação de dados** (especificamente livros) nos formatos JSON (via Gson) e XML (via JAXB) na aplicação desktop.
-
-- **Prover uma interface gráfica** amigável e interativa utilizando JavaFX para a aplicação desktop.
-
-- **Garantir a qualidade e robustez do sistema** através da implementação de **testes unitários** abrangentes para as camadas de lógica de negócio e controladores, utilizando JUnit (e Mockito para a API).
-
-- **Desenvolver e documentar uma API RESTful robusta** com Spring Boot para expor os recursos do sistema, permitindo a integração com outras plataformas e serviços.
+  - **Implementar operações CRUD** completas para as entidades Livro, Autor, Editora, Usuário e Empréstimo, tanto na aplicação desktop quanto na API.
+- **Assegurar a persistência de dados** utilizando **SQLite (via JPA/Hibernate)** para a aplicação desktop e **MongoDB (via Spring Data)** para a API RESTful.
+- **Garantir a sincronização de dados** em tempo real entre a aplicação desktop e a API através de um middleware que escuta eventos de CRUD publicados em um canal **Redis (Pub/Sub)**.
+- **Permitir a importação e exportação de dados** nos formatos **JSON (Gson)** e **XML (JAXB)** na aplicação desktop.
+- **Prover uma interface gráfica amigável** e interativa com **JavaFX** para a aplicação desktop.
+- **Garantir a qualidade do sistema** através de **testes unitários** abrangentes, utilizando JUnit (e Mockito para a API).
+- **Desenvolver e documentar uma API RESTful robusta** com Spring Boot e Swagger para expor os recursos do sistema.
 
 ## Tecnologias e Ferramentas Utilizadas
 
 ### Apllication Descktop
 
-  - **JavaFX:** Framework para construção da interface gráfica da aplicação desktop.
-  - **ORMLite:** Biblioteca ORM para mapeamento de objetos Java para tabelas de banco de dados e vice-versa.
-  - **SQLite:** Banco de dados relacional leve e embutido (livraria.sqlite) para persistência dos dados.
-  - **Gson:** Biblioteca Java para serialização e desserialização de objetos Java em JSON.
-  - **JAXB (Java Architecture for XML Binding):** API para mapeamento de objetos Java para XML e vice-versa.
-  - **JDK 11 ou superior:** Ambiente de desenvolvimento Java necessário.
-  - **Testes unitários com JUnit.**
-  - **Integrador de Entidades:** uso de Redis, Lettuce e Pub/Sub.
+- **JavaFX:** Framework para a construção da interface gráfica.
+- **JPA (Jakarta Persistence API) & Hibernate:** Framework ORM para mapeamento objeto-relacional e persistência de dados.
+- **SQLite:** Banco de dados relacional embutido (`livraria.sqlite`).
+- **Redis (via Lettuce):** Cliente para publicar eventos de CRUD no barramento de mensagens.
+- **Gson & JAXB:** Bibliotecas para serialização de dados em JSON e XML.
+- **Maven:** Gerenciamento de dependências e build do projeto.
+- **JUnit 5:** Para testes unitários da lógica de negócio.
 
 ### API RESTful
 
@@ -99,13 +92,12 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 |Implementar Pub/Sub no Projeto JavaFX para eventos de CRUD| 29/07| 30/07 | Stephany|Concluída
 |Configurar Redis no Projeto API RESTful| 29/07| 30/07 | Vitoria|Concluída
 |Implementar Pub/Sub no Projeto API RESTful para eventos de CRUD| 29/07| 30/07 | Stephany e Vitoria|Concluída
-|Testes de Integração com Redis| 29/07| 29/07 | Stephany|Concluída
 
 ## Modelagem Inicial
 
 ### Diagrama de Classes com Relações
 
-![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-classe1.png)
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/main/diagramas/diagrama-classe1.png)
 
 ### Arquitetura do Sistema (MVC)
 
@@ -113,7 +105,7 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 
 ### Diagrama de Sequência para Operações de Integração
 
-![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-sequencia.png)
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/main/diagramas/diagrama-sequencia.png)
 
 
 ### Diagrama de Sequência para Operações de Integração Redis 
@@ -132,6 +124,7 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 
   - [Sistema de Gerenciamento de Biblioteca API RestFull](https://github.com/SPD-BES-2025-3/grupo9/blob/main/api_rest_full_application/README.md)
   - [Sistema de Gerenciamento de Biblioteca JavaFX](https://github.com/SPD-BES-2025-3/grupo9/blob/main/desktop_application/README.md)
+   - [Sistema de Gerenciamento de Biblioteca Redis](https://github.com/SPD-BES-2025-3/grupo9/blob/main/middleware/README.md)
 
 ### Documentação de Código
 
