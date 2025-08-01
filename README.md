@@ -99,13 +99,12 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 |Implementar Pub/Sub no Projeto JavaFX para eventos de CRUD| 29/07| 30/07 | Stephany|Concluída
 |Configurar Redis no Projeto API RESTful| 29/07| 30/07 | Vitoria|Concluída
 |Implementar Pub/Sub no Projeto API RESTful para eventos de CRUD| 29/07| 30/07 | Stephany e Vitoria|Concluída
-|Testes de Integração com Redis| 29/07| 29/07 | Stephany|Concluída
 
 ## Modelagem Inicial
 
 ### Diagrama de Classes com Relações
 
-![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-classe1.png)
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/main/diagramas/diagrama-classe1.png)
 
 ### Arquitetura do Sistema (MVC)
 
@@ -113,7 +112,7 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 
 ### Diagrama de Sequência para Operações de Integração
 
-![](https://github.com/SPD-BES-2025-3/grupo9/blob/thayliny/diagramas/diagrama-sequencia.png)
+![](https://github.com/SPD-BES-2025-3/grupo9/blob/main/diagramas/diagrama-sequencia.png)
 
 
 ### Diagrama de Sequência para Operações de Integração Redis 
@@ -132,6 +131,7 @@ O objetivo é desenvolver um sistema de gerenciamento de biblioteca distribuído
 
   - [Sistema de Gerenciamento de Biblioteca API RestFull](https://github.com/SPD-BES-2025-3/grupo9/blob/main/api_rest_full_application/README.md)
   - [Sistema de Gerenciamento de Biblioteca JavaFX](https://github.com/SPD-BES-2025-3/grupo9/blob/main/desktop_application/README.md)
+   - [Sistema de Gerenciamento de Biblioteca Redis](https://github.com/SPD-BES-2025-3/grupo9/blob/main/middleware/README.md)
 
 ### Documentação de Código
 
